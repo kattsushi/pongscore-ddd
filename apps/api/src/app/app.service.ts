@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Message } from '@ionicnx/api-interfaces';
+import { Message } from '@pongscore/api-interfaces';
 
 @Injectable()
 export class AppService {

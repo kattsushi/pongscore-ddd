@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { Message } from '@ionicnx/api-interfaces';
+import { Message } from '@pongscore/api-interfaces';
 
 import { AppService } from './app.service';
 

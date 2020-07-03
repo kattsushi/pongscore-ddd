@@ -1,0 +1,6 @@
+{
+  "name": "pong-score",
+  "integrations": {},
+  "type": "angular",
+  "root": "apps/pong-score"
+}

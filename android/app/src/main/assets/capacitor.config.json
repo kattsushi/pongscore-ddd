@@ -1,0 +1,13 @@
+{
+  "appId": "com.pongscore.app",
+  "appName": "pong-score",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist/apps/pong-score",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

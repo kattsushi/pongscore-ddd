@@ -16,7 +16,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ionicnx/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@pongscore/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@pongscore/ui": ["libs/ui/src/index.ts"],
+      "@pongscore/shared": ["libs/shared/src/index.ts"],
+      "@pongscore/auth": ["libs/auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

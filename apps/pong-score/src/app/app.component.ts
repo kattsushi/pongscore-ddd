@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Message } from '@ionicnx/api-interfaces';
+import { Message } from '@pongscore/api-interfaces';
 
 @Component({
-  selector: 'ionicnx-root',
+  selector: 'pongscore-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

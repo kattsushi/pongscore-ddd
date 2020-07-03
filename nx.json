@@ -1,5 +1,5 @@
 {
-  "npmScope": "ionicnx",
+  "npmScope": "pongscore",
   "affected": {
     "defaultBase": "master"
   },
@@ -15,9 +15,12 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "accessToken": "ZTFmOGY2NjktZjMwZC00ODdmLTljOTQtZjUyNTE0MjQyYWM1fHJlYWQtd3JpdGU=",
+        "cacheableOperations": ["build", "test", "lint", "e2e"],
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
       }
     }
   },
@@ -33,6 +36,15 @@
       "tags": []
     },
     "api-interfaces": {
+      "tags": []
+    },
+    "ui": {
+      "tags": []
+    },
+    "shared": {
+      "tags": []
+    },
+    "auth": {
       "tags": []
     }
   }
