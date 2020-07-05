@@ -1,13 +1,27 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@pongscore/api-interfaces';
-
+import { Component, OnInit, OnDestroy } from '@angular/core';
 @Component({
   selector: 'pongscore-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  styles: [``],
 })
-export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient) {}
+export class AppComponent implements OnInit, OnDestroy {
+  prefersDark: any = window.matchMedia('(prefers-color-scheme: dark)');
+  constructor() {}
+
+  ngOnDestroy(): void {
+    this.prefersDark.removeListener('mediaQuery');
+  }
+
+  ngOnInit(): void {
+    this.toggleDarkTheme(this.prefersDark.matches);
+    // Listen for changes to the prefers-color-scheme media query
+    this.prefersDark.addListener((mediaQuery) => this.toggleDarkTheme(mediaQuery.matches));
+  }
+
+  toggleDarkTheme(shouldAdd) {
+    document.body.classList.toggle('dark', shouldAdd);
+  }
+
 }
