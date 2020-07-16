@@ -19,7 +19,7 @@ export class LogoComponent implements OnInit, OnDestroy {
   prefersDark: any = window.matchMedia('(prefers-color-scheme: dark)');
   constructor(private cn: ChangeDetectorRef) { }
   ngOnDestroy(): void {
-    this.prefersDark.removeListener('mediaQuery');
+    // this.prefersDark.removeListener('mediaQuery');
   }
 
   ngOnInit(): void {

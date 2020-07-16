@@ -59,6 +59,7 @@
     "@ionic/angular-toolkit": "latest",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
+    "@ngxs/devtools-plugin": "^3.6.2",
     "@nrwl/cypress": "9.5.0",
     "@nrwl/jest": "9.5.0",
     "@nrwl/nest": "9.5.0",
