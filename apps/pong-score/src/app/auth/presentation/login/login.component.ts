@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { RegisterComponent } from '../register/register.component';
 
+/**
+ * Login Component
+ *
+ * @export
+ * @class LoginComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'pongscore-login',
   template: `
@@ -48,20 +55,31 @@ import { RegisterComponent } from '../register/register.component';
   `]
 })
 export class LoginComponent implements OnInit {
-
+  /**
+   * Creates an instance of login component.
+   * @param modalController
+   */
   constructor(private modalController: ModalController) { }
 
   ngOnInit(): void {
   }
-
+  /**
+   * Dismiss login
+   */
   dismissLogin(): void {
 
   }
-
-  login(form): void {
+  /**
+   * Logins login component
+   * @param form
+   */
+  login(form: any): void {
 
   }
-
+  /**
+   * Registers modal
+   * @returns
+   */
   async registerModal() {
     const registerModal = await this.modalController.create({
       component: RegisterComponent

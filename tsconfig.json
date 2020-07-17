@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "strict": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -15,6 +16,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "strictNullChecks": true,
     "paths": {
       "@pongscore/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@pongscore/ui": ["libs/ui/src/index.ts"],

@@ -3,6 +3,13 @@ import { PopoverController } from '@ionic/angular';
 import { SettingsComponent } from '@pongscore/ui';
 import { Store } from '@ngxs/store';
 import { Logout } from '../auth/application/store/auth.actions';
+/**
+ * Dashboard Component
+ *
+ * @export
+ * @class DashboardComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'pongscore-dashboard',
   template: `
@@ -30,7 +37,11 @@ import { Logout } from '../auth/application/store/auth.actions';
   `]
 })
 export class DashboardComponent implements OnInit {
-
+  /**
+   * Creates an instance of dashboard component.
+   * @param popoverController
+   * @param store
+   */
   constructor(
     public popoverController: PopoverController,
     private store: Store
@@ -38,11 +49,14 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  /**
+   * Presents popover
+   * @param ev
+   */
   async presentPopover(ev: any) {
-    const myEmitter: any = new EventEmitter< any >();
+    const myEmitter: EventEmitter<string> = new EventEmitter<string>();
 		myEmitter.subscribe(
-			v=> console.log( `my emitter fired and returned a value of ${v}`)
+			(v: string) => console.log( `my emitter fired and returned a value of ${v}`)
 		);
     const popover = await this.popoverController.create({
       component: SettingsComponent,
@@ -55,8 +69,7 @@ export class DashboardComponent implements OnInit {
     });
     await popover.present();
 
-    await popover.onDidDismiss().then(
-      (data: any) => {
+    popover.onDidDismiss<any>().then(data => {
         console.log('entra aqui', data);
         if (data && data.data === 'logout') {
           this.store.dispatch(Logout);
@@ -64,6 +77,6 @@ export class DashboardComponent implements OnInit {
         } else if (data && data.data === 'darkmode') {
 
         }
-      });
+    });
   }
 }

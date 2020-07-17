@@ -1,5 +1,13 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
+/**
+ * Logo Component
+ *
+ * @export
+ * @class LogoComponent
+ * @implements {OnInit}
+ * @implements {OnDestroy}
+ */
 @Component({
   selector: 'pongscore-logo',
   template: `
@@ -15,18 +23,37 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
   `]
 })
 export class LogoComponent implements OnInit, OnDestroy {
-  src = 'assets/img/logo.svg';
-  prefersDark: any = window.matchMedia('(prefers-color-scheme: dark)');
+  /**
+   * Src  of logo component
+   */
+  public src = 'assets/img/logo.svg';
+  /**
+   * Prefers dark of logo component
+   */
+  private prefersDark: MediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+  /**
+   * Creates an instance of logo component.
+   * @param cn
+   */
   constructor(private cn: ChangeDetectorRef) { }
+  /**
+   * on destroy
+   */
   ngOnDestroy(): void {
     // this.prefersDark.removeListener('mediaQuery');
   }
-
+  /**
+   * on init
+   */
   ngOnInit(): void {
     this.toggleDarkTheme(this.prefersDark.matches);
     // Listen for changes to the prefers-color-scheme media query
-    this.prefersDark.addListener((mediaQuery) => this.toggleDarkTheme(mediaQuery.matches));
+    this.prefersDark.addEventListener('change', (mediaQuery) => this.toggleDarkTheme(mediaQuery.matches));
   }
+  /**
+   * Toggles dark theme
+   * @param matches
+   */
   toggleDarkTheme(matches: boolean) {
     if (matches) {
       this.src = 'assets/img/logo-dark.svg';
@@ -35,6 +62,4 @@ export class LogoComponent implements OnInit, OnDestroy {
     }
     this.cn.detectChanges();
   }
-
-
 }

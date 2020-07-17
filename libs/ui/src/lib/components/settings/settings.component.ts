@@ -1,5 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
+/**
+ * Settings
+ *
+ * @export
+ * @class SettingsComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'pongscore-settings',
   template: `
@@ -18,20 +25,24 @@ import { PopoverController } from '@ionic/angular';
   ]
 })
 export class SettingsComponent implements OnInit {
-  @Input() darkmode: boolean;
+  @Input()
+  darkmode = false;
   constructor(
     private popover: PopoverController
   ) { }
 
   ngOnInit(): void {
   }
-
+  /**
+   * Logouts settings component
+   */
   public logout() {
     this.popover.dismiss('logout');
   }
-
+  /**
+   * Changes mode
+   */
   public changeMode() {
     this.popover.dismiss('darkmode');
   }
-
 }

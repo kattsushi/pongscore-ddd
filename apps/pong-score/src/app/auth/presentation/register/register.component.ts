@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
+/**
+ * Register
+ *
+ * @export
+ * @class RegisterComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'pongscore-register',
   template: `
@@ -47,17 +54,25 @@ import { ModalController } from '@ionic/angular';
   styles: [``]
 })
 export class RegisterComponent implements OnInit {
-
-  constructor(private modalController: ModalController) { }
+/**
+ * Creates an instance of register component.
+ * @param modalController
+ */
+constructor(private modalController: ModalController) { }
 
   ngOnInit(): void {
   }
-
+  /**
+   * Dismiss register
+   */
   dismissRegister(): void {
     this.modalController.dismiss();
   }
-
-  register(form): void {
+  /**
+   * Registers register component
+   * @param form
+   */
+  register(form: any): void {
 
   }
 

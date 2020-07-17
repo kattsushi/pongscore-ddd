@@ -204,6 +204,11 @@
             "assets": ["apps/api/src/assets"]
           },
           "configurations": {
+            "development": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false
+            },
             "production": {
               "optimization": true,
               "extractLicenses": true,
