@@ -32,7 +32,7 @@ export interface User extends Document {
     /**
    * Password  of create user dto
    */
-    readonly password: string;
+    password: string;
     /**
    * Address  of create user dto
    */

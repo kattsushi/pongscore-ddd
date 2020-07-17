@@ -1,7 +1,9 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
-import { jwtConstants } from './constants';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { jwtConstants } from '../constants';
+import { AuthService } from '../auth.service';
+import { JwtPayload } from '@pongscore/api-interfaces';
 /**
  * Jwt Strategy
  *
@@ -14,7 +16,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   /**
    * Creates an instance of jwt strategy.
    */
-  constructor() {
+  constructor(
+    private readonly authService: AuthService
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -27,7 +31,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload
    * @returns
    */
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
+  async validate(payload: JwtPayload): Promise<any> {
+    const user = await this.authService.validateUserByJwt(payload);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    return user;
   }
 }

@@ -1,14 +1,23 @@
-import { Controller, Get, UseGuards, Post, Req } from '@nestjs/common';
+import { Controller, Get, UseGuards, Post, Req, Body, Logger } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+
+import { Request } from 'express';
+import { LoginUserDto } from '@pongscore/api-interfaces';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+
+interface RequestWithUser extends Request {
+  user: LoginUserDto;
+}
 /**
  * Auth Controller
  * @export
  * @class AuthController
  */
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   /**
@@ -21,10 +30,11 @@ export class AuthController {
    * @param req
    * @returns
    */
-  @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Req() req: Request) {
-    return this.authService.login(req.user);
+  @ApiOperation({ summary: 'Do Login' })
+  async login(@Body() loginUserDto: LoginUserDto) {
+    console.log('DTO', JSON.stringify(loginUserDto));
+    return this.authService.validateUserByPassword(loginUserDto);
   }
   /**
    * Uses guards
@@ -33,7 +43,10 @@ export class AuthController {
    */
   @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @ApiOperation({ summary: 'Get a Profile' })
   getProfile(@Req() req: Request) {
-    return req.user;
+    return {
+      message: 'You did it'
+    };
   }
 }

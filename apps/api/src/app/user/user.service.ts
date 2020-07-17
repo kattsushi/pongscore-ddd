@@ -28,6 +28,11 @@ export class UserService {
     return user;
   }
 
+  async findOneByEmail(email: string | undefined): Promise<User | null> {
+    const user = await this.userModel.findOne({email});
+    return user;
+  }
+
   /**
    * Gets all users
    * @returns all users
