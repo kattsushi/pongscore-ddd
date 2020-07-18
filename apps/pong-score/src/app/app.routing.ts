@@ -11,11 +11,13 @@ const routes: Routes = [{
   canActivate: [AuthGuard]
 },{
   path: 'tabs',
-  loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+  loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+  canActivate: [AuthGuard]
 },
 {
   path: 'comments',
-  loadChildren: () => import('./comments/comments.module').then( m => m.CommentsPageModule)
+  loadChildren: () => import('./comments/comments.module').then( m => m.CommentsPageModule),
+  canActivate: [AuthGuard]
 },{
   path: '', redirectTo: 'auth', pathMatch: 'full'
 }];

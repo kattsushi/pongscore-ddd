@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxsModule } from '@ngxs/store';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { IonicModule} from '@ionic/angular';
 import { UiModule } from '@pongscore/ui';
 
@@ -11,7 +10,9 @@ import { AuthState } from './application/store/auth.state';
 import { AuthRoutingModule } from './auth.routing';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthGuard } from './infrastructure/auth.guard';
-
+/**
+ * Auth Ng module
+ */
 @NgModule({
   imports: [
     CommonModule,
@@ -23,10 +24,7 @@ import { AuthGuard } from './infrastructure/auth.guard';
       rippleEffect: false,
       mode: 'md'
     }),
-    NgxsModule.forFeature([AuthState]),
-    NgxsStoragePluginModule.forRoot({
-      key: 'auth.token'
-    })
+    NgxsModule.forFeature([AuthState])
   ],
   declarations: [LoginComponent, RegisterComponent],
   exports: [LoginComponent, RegisterComponent],

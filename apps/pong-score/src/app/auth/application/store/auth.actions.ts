@@ -3,18 +3,18 @@
  */
 export interface AuthStateModel {
   token: string | null;
-  username: string | null;
+  email: string | null;
 }
 /**
  * Login
  */
-export class Login {
+export class LoginAction {
   static readonly type = '[Auth] Login';
-  constructor(public payload: { username: string; password: string }) {}
+  constructor(public payload: { email: string; password: string }) {}
 }
 /**
  * Logout
  */
-export class Logout {
+export class LogoutAction {
   static readonly type = '[Auth] Logout';
 }

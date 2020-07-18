@@ -4,10 +4,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 /**
  * Ng module
  */
@@ -22,6 +24,10 @@ import { AppRoutingModule } from './app.routing';
       mode: 'md'
     }),
     NgxsModule.forRoot([]),
+    NgxsRouterPluginModule.forRoot(),
+    NgxsStoragePluginModule.forRoot({
+      key: 'auth.token'
+    }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     AppRoutingModule
   ],

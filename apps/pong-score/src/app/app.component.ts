@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Actions, ofActionDispatched } from '@ngxs/store';
 import { Router } from '@angular/router';
-import { Logout } from './auth/application/store/auth.actions';
+import { LogoutAction } from './auth/application/store/auth.actions';
 
 /**
  * Root Component
@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // Listen for changes to the prefers-color-scheme media query
     this.prefersDark.addEventListener('change', (mediaQuery) => this.toggleDarkTheme(mediaQuery.matches));
 
-    this.actions.pipe(ofActionDispatched(Logout)).subscribe(() => {
+    this.actions.pipe(ofActionDispatched(LogoutAction)).subscribe(() => {
       this.router.navigate(['/auth/login']);
     });
   }

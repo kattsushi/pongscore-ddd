@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { SettingsComponent } from '@pongscore/ui';
 import { Store } from '@ngxs/store';
-import { Logout } from '../auth/application/store/auth.actions';
+import { LogoutAction } from '../auth/application/store/auth.actions';
 /**
  * Dashboard Component
  *
@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
     popover.onDidDismiss<any>().then(data => {
         console.log('entra aqui', data);
         if (data && data.data === 'logout') {
-          this.store.dispatch(Logout);
+          this.store.dispatch(LogoutAction);
           // trigger here the method dependind on the popover response
         } else if (data && data.data === 'darkmode') {
 

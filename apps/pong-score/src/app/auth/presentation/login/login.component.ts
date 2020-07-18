@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { RegisterComponent } from '../register/register.component';
+import { Store } from '@ngxs/store';
+import { LoginAction } from '../../application/store/auth.actions';
 
 /**
  * Login Component
@@ -59,7 +61,9 @@ export class LoginComponent implements OnInit {
    * Creates an instance of login component.
    * @param modalController
    */
-  constructor(private modalController: ModalController) { }
+  constructor(
+    private store: Store,
+    private modalController: ModalController) { }
 
   ngOnInit(): void {
   }
@@ -74,7 +78,8 @@ export class LoginComponent implements OnInit {
    * @param form
    */
   login(form: any): void {
-
+    // TODO: validations for stronger password and email.
+    this.store.dispatch(new LoginAction(form.value));
   }
   /**
    * Registers modal

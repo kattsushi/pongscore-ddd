@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 /**
  * Auth Service
  *
@@ -10,7 +11,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
   /**
    * Logouts auth service
    * @param token
@@ -24,7 +27,7 @@ export class AuthService {
    * @param payload
    * @returns login
    */
-  login(payload: { username: string; password: string; }): Observable<any> {
-    throw new Error("Method not implemented.");
+  login({ email, password }: { email: string; password: string; }): Observable<any> {
+    return this.http.post('http://localhost:3333/auth/login', { email, password });
   }
 }
