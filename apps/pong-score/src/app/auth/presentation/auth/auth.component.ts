@@ -1,5 +1,7 @@
 import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { MediaMatcher, BreakpointObserver } from '@angular/cdk/layout';
+import { ModalController } from '@ionic/angular';
+import { ModalComponent } from '../modal/modal.component';
 /**
  *
  *
@@ -22,10 +24,13 @@ import { MediaMatcher, BreakpointObserver } from '@angular/cdk/layout';
           <ion-col size-lg="6" size-md="6" size-sm="6" size="12">
             <ion-slides pager="false" [options]="slideOpts">
               <ion-slide>
-                <pongscore-login (goToRegister)="goToRegisterPage()"></pongscore-login>
+                <pongscore-login (goToRegister)="goToRegisterPage()" (goToForgotPassword)="goToForgotPasswordPage()"></pongscore-login>
               </ion-slide>
               <ion-slide>
                 <pongscore-register (goToLogin)="goToLoginPage()"></pongscore-register>
+              </ion-slide>
+              <ion-slide>
+                <pongscore-forgot-password (goToLogin)="goToLoginPage()"></pongscore-forgot-password>
               </ion-slide>
             </ion-slides>
           </ion-col>
@@ -86,7 +91,8 @@ export class AuthComponent implements OnInit, AfterContentInit {
    */
   constructor(
     public mediaMatcher: MediaMatcher,
-    public breakpointObserver: BreakpointObserver
+    public breakpointObserver: BreakpointObserver,
+    private modalController: ModalController
   ) { }
   /**
    * on init
@@ -108,6 +114,7 @@ export class AuthComponent implements OnInit, AfterContentInit {
    */
   breakPointListener(event: any) {
     if (this.slides) {
+      this.slides.slideTo(0);
       this.slides.lockSwipes(event.matches);
     }
   }
@@ -118,5 +125,16 @@ export class AuthComponent implements OnInit, AfterContentInit {
 
   goToRegisterPage() {
     this.slides?.slideTo(1);
+  }
+
+  async goToForgotPasswordPage() {
+    if (this.breakpointObserver.isMatched('(min-width: 576px)')) {
+      const registerModal = await this.modalController.create({
+        component: ModalComponent
+      });
+      return await registerModal.present();
+    } else {
+      this.slides?.slideTo(2);
+    }
   }
 }

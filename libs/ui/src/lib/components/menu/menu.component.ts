@@ -4,7 +4,7 @@ import { Component, OnInit, Input } from '@angular/core';
   selector: 'pongscore-menu',
   template: `
       <ion-header>
-        <ion-toolbar color="primary">
+        <ion-toolbar>
           <ion-title>Start Menu</ion-title>
         </ion-toolbar>
       </ion-header>
@@ -20,7 +20,6 @@ import { Component, OnInit, Input } from '@angular/core';
   `,
   styles: [`
     :host {
-      margin-top: 56px;
       height: 100%
     }
   `]

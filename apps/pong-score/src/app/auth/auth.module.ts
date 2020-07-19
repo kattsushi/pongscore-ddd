@@ -12,6 +12,8 @@ import { AuthState } from './application/store/auth.state';
 import { AuthRoutingModule } from './auth.routing';
 import { AuthGuard } from './infrastructure/auth.guard';
 import { AuthComponent } from './presentation/auth/auth.component';
+import { ForgotPasswordComponent } from './presentation/forgot-password/forgot-password.component';
+import { ModalComponent } from './presentation/modal/modal.component';
 /**
  * Auth Ng module
  */
@@ -29,8 +31,7 @@ import { AuthComponent } from './presentation/auth/auth.component';
     }),
     NgxsModule.forFeature([AuthState])
   ],
-  declarations: [LoginComponent, RegisterComponent, AuthComponent],
-  exports: [LoginComponent, RegisterComponent],
+  declarations: [LoginComponent, RegisterComponent, AuthComponent, ForgotPasswordComponent, ModalComponent],
   providers: [AuthState, AuthGuard]
 })
 export class AuthModule {}

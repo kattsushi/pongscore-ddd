@@ -1,6 +1,4 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { RegisterComponent } from '../register/register.component';
 import { Store } from '@ngxs/store';
 import { LoginAction } from '../../application/store/auth.actions';
 
@@ -33,7 +31,7 @@ import { LoginAction } from '../../application/store/auth.actions';
               <ion-input ngModel type="password" name="password"></ion-input>
             </ion-item>
 
-            <p text-right>Forgot Password?</p>
+            <p text-right (click)="goToForgotPassword.emit()">Forgot Password?</p>
 
             <ion-button type="submit" expand="full" color="primary">Login</ion-button>
           </form>
@@ -72,13 +70,14 @@ import { LoginAction } from '../../application/store/auth.actions';
 export class LoginComponent implements OnInit {
 
   @Output() goToRegister: EventEmitter<any> = new EventEmitter();
+  @Output() goToForgotPassword: EventEmitter<any> = new EventEmitter();
   /**
    * Creates an instance of login component.
    * @param modalController
    */
   constructor(
-    private store: Store,
-    private modalController: ModalController) { }
+    private store: Store
+  ) { }
 
   ngOnInit(): void {
   }
@@ -96,15 +95,4 @@ export class LoginComponent implements OnInit {
     // TODO: validations for stronger password and email.
     this.store.dispatch(new LoginAction(form.value));
   }
-  /**
-   * Registers modal
-   * @returns
-   */
-  async registerModal() {
-    const registerModal = await this.modalController.create({
-      component: RegisterComponent
-    });
-    return await registerModal.present();
-  }
-
 }

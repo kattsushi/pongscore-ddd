@@ -15,7 +15,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
   `,
   styles: [`
     ion-img {
-      width: 100px;
+      width: 200px;
       margin: 0 auto;
       margin-top: 25px;
       margin-bottom: 40px;
