@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 /**
@@ -11,49 +11,70 @@ import { ModalController } from '@ionic/angular';
 @Component({
   selector: 'pongscore-register',
   template: `
-    <ion-header>
-        <ion-toolbar>
-          <ion-buttons slot="primary">
-            <ion-button>
-              <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
-            </ion-button>
-          </ion-buttons>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <pongscore-logo></pongscore-logo>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <form #form="ngForm" (ngSubmit)="register(form)" method="post">
+            <ion-item>
+              <ion-label position="floating">First Name</ion-label>
+              <ion-input ngModel name="fName"></ion-input>
+            </ion-item>
 
-          <ion-title>Register</ion-title>
-        </ion-toolbar>
-      </ion-header>
-    <ion-content class="ion-padding">
-      <form #form="ngForm" (ngSubmit)="register(form)" method="post">
-        <pongscore-logo></pongscore-logo>
-        <ion-item>
-          <ion-label position="floating">First Name</ion-label>
-          <ion-input ngModel name="fName"></ion-input>
-        </ion-item>
+            <ion-item>
+              <ion-label position="floating">Last Name</ion-label>
+              <ion-input ngModel name="lName"></ion-input>
+            </ion-item>
 
-        <ion-item>
-          <ion-label position="floating">Last Name</ion-label>
-          <ion-input ngModel name="lName"></ion-input>
-        </ion-item>
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input type="email" ngModel name="email"></ion-input>
+            </ion-item>
 
-        <ion-item>
-          <ion-label position="floating">Email</ion-label>
-          <ion-input type="email" ngModel name="email"></ion-input>
-        </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input type="password" ngModel name="password"></ion-input>
+            </ion-item>
 
-        <ion-item>
-          <ion-label position="floating">Password</ion-label>
-          <ion-input type="password" ngModel name="password"></ion-input>
-        </ion-item>
-
-        <ion-button type="submit" expand="full" color="secondary">Register</ion-button>
-      </form>
-      <p text-center>Already have a account?</p>
-      <ion-button expand="full" color="primary" (click)="dismissRegister()">Login</ion-button>
-    </ion-content>
+            <ion-button type="submit" expand="full" color="secondary">Register</ion-button>
+          </form>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="12">
+          <div class="login">
+            <p text-center>Already have a account?</p>
+            <ion-button expand="full" color="primary" (click)="goToLogin.emit()">Login</ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   `,
-  styles: [``]
+  styles: [`
+    :host {
+      width: 100%;
+      max-width: 500px;
+    }
+    @media (min-width: 576px) {
+      .login {
+        display: none;
+      }
+      pongscore-logo {
+        display: none;
+      }
+      :host {
+        margin-top: 200px;
+      }
+    }
+  `]
 })
 export class RegisterComponent implements OnInit {
+
+  @Output() goToLogin: EventEmitter<string> = new EventEmitter();
 /**
  * Creates an instance of register component.
  * @param modalController

@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { LogoComponent } from './components/logo/logo.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { FormsModule } from '@angular/forms';
+import { MenuComponent } from './components/menu/menu.component';
 
 @NgModule({
   imports: [
@@ -11,7 +12,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     IonicModule
   ],
-  declarations: [LogoComponent, SettingsComponent],
-  exports: [LogoComponent, SettingsComponent],
+  declarations: [LogoComponent, SettingsComponent, MenuComponent],
+  exports: [LogoComponent, SettingsComponent, MenuComponent],
 })
 export class UiModule {}

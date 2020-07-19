@@ -14,9 +14,31 @@ import { LogoutAction } from './auth/application/store/auth.actions';
 @Component({
   selector: 'pongscore-root',
   template: `
-    <router-outlet></router-outlet>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-menu-button slot="start"></ion-menu-button>
+          <!-- <ion-buttons slot="primary">
+            <ion-button>
+              <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+            </ion-button>
+          </ion-buttons> -->
+        </ion-toolbar>
+      </ion-header>
+      <ion-split-pane class="custom-pane" contentId="main">
+
+        <ion-menu class="my-custom-menu" side="start" menuId="first" contentId="main">
+          <pongscore-menu></pongscore-menu>
+        </ion-menu>
+        <ion-router-outlet id="main"></ion-router-outlet>
+      </ion-split-pane>
+    </ion-app>
   `,
-  styles: [``],
+  styles: [`
+    .custom-pane {
+      --side-max-width: 20%;
+    }
+  `],
 })
 export class AppComponent implements OnInit, OnDestroy {
   /**

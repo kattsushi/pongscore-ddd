@@ -1,0 +1,122 @@
+import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { MediaMatcher, BreakpointObserver } from '@angular/cdk/layout';
+/**
+ *
+ *
+ * @export
+ * @class AuthComponent
+ * @implements {OnInit}
+ * @implements {AfterContentInit}
+ */
+@Component({
+  selector: 'pongscore-auth',
+  template: `
+    <ion-content class="ion-padding">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <pongscore-logo></pongscore-logo>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-lg="6" size-md="6" size-sm="6" size="12">
+            <ion-slides pager="false" [options]="slideOpts">
+              <ion-slide>
+                <pongscore-login (goToRegister)="goToRegisterPage()"></pongscore-login>
+              </ion-slide>
+              <ion-slide>
+                <pongscore-register (goToLogin)="goToLoginPage()"></pongscore-register>
+              </ion-slide>
+            </ion-slides>
+          </ion-col>
+          <ion-col class="register-form" size-lg="6" size-md="6" size-sm="6" size="12">
+            <pongscore-register></pongscore-register>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  `,
+  styles: [`
+    .width-100 {
+      width: 100px;
+    }
+
+    ion-grid {
+      height: 100%;
+      margin-top: 56px;
+    }
+
+    @media (max-width: 576px) {
+      .register-form {
+        display: none;
+      }
+      pongscore-logo {
+        display: none;
+      }
+    }
+    @media (min-width: 1000px) {
+      ion-col {
+        padding-left: 100px;
+        padding-right: 100px;
+      }
+    }
+  `]
+})
+export class AuthComponent implements OnInit, AfterContentInit {
+  /**
+   * Matcher  of auth component
+   */
+  matcher!: MediaQueryList;
+  /**
+   * Slides  of auth component
+   */
+  slides: HTMLIonSlidesElement | null | undefined;
+  /**
+   * Slide opts of auth component
+   */
+  slideOpts: any = {
+    initialSlide: 0,
+    speed: 400,
+    allowTouchMove: true
+  };
+  /**
+   * Creates an instance of auth component.
+   * @param mediaMatcher
+   * @param breakpointObserver
+   */
+  constructor(
+    public mediaMatcher: MediaMatcher,
+    public breakpointObserver: BreakpointObserver
+  ) { }
+  /**
+   * on init
+   */
+  ngOnInit(): void {
+    this.matcher = this.mediaMatcher.matchMedia('(min-width: 576px)');
+    this.matcher.addEventListener('change', this.breakPointListener.bind(this));
+  }
+  /**
+   * after content init
+   */
+  ngAfterContentInit() {
+    this.slides = document.querySelector('ion-slides');
+    this.slides?.lockSwipes(this.breakpointObserver.isMatched('(min-width: 576px)'));
+  }
+  /**
+   * Breaks point listener
+   * @param event
+   */
+  breakPointListener(event: any) {
+    if (this.slides) {
+      this.slides.lockSwipes(event.matches);
+    }
+  }
+
+  goToLoginPage() {
+    this.slides?.slideTo(0);
+  }
+
+  goToRegisterPage() {
+    this.slides?.slideTo(1);
+  }
+}

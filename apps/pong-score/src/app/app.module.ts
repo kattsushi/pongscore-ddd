@@ -10,6 +10,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { UiModule } from '@pongscore/ui';
 /**
  * Ng module
  */
@@ -18,6 +19,7 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
   imports: [
     BrowserModule,
     HttpClientModule,
+    UiModule,
     IonicStorageModule.forRoot(),
     IonicModule.forRoot({
       rippleEffect: false,
