@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Actions, ofActionDispatched } from '@ngxs/store';
-import { Router } from '@angular/router';
+import { Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { LogoutAction } from './auth/application/store/auth.actions';
+import { Navigate } from '@ngxs/router-plugin';
 
 /**
  * Root Component
@@ -16,16 +16,10 @@ import { LogoutAction } from './auth/application/store/auth.actions';
   template: `
     <ion-app>
       <ion-split-pane class="custom-pane" contentId="main">
-
         <ion-menu class="my-custom-menu" side="start" menuId="first" contentId="main">
           <pongscore-menu></pongscore-menu>
         </ion-menu>
         <ion-content id="main">
-          <ion-header>
-            <ion-toolbar>
-              <ion-menu-button slot="start"></ion-menu-button>
-            </ion-toolbar>
-          </ion-header>
           <ion-router-outlet id="main"></ion-router-outlet>
         </ion-content>
       </ion-split-pane>
@@ -51,8 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   constructor(
     private actions: Actions,
-    private router: Router
-  ) {}
+    private store: Store
+  ) { }
 
   /**
    * on destroy
@@ -70,7 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.prefersDark.addEventListener('change', (mediaQuery) => this.toggleDarkTheme(mediaQuery.matches));
 
     this.actions.pipe(ofActionDispatched(LogoutAction)).subscribe(() => {
-      this.router.navigate(['/auth/login']);
+      this.store.dispatch(new Navigate(['/auth']));
     });
   }
 
@@ -81,5 +75,4 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleDarkTheme(shouldAdd: boolean) {
     document.body.classList.toggle('dark', shouldAdd);
   }
-
 }

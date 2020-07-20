@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -11,6 +10,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { UiModule } from '@pongscore/ui';
+import { SharedModule } from '@pongscore/shared';
+import { environment } from '../environments/environment';
 /**
  * Ng module
  */
@@ -18,7 +19,7 @@ import { UiModule } from '@pongscore/ui';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    HttpClientModule,
+    SharedModule.forRoot(environment),
     UiModule,
     IonicStorageModule.forRoot(),
     IonicModule.forRoot({
@@ -36,4 +37,4 @@ import { UiModule } from '@pongscore/ui';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

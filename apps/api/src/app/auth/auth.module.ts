@@ -19,11 +19,11 @@ import { AuthController } from './auth.controller';
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s'}
+      signOptions: { expiresIn: '60s' }
     })
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   exports: [AuthService]
 })
-export class AuthModule {}
+export class AuthModule { }

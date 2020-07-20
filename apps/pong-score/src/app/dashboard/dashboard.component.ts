@@ -55,9 +55,9 @@ export class DashboardComponent implements OnInit {
    */
   async presentPopover(ev: any) {
     const myEmitter: EventEmitter<string> = new EventEmitter<string>();
-		myEmitter.subscribe(
-			(v: string) => console.log( `my emitter fired and returned a value of ${v}`)
-		);
+    myEmitter.subscribe(
+      (v: string) => console.log(`my emitter fired and returned a value of ${v}`)
+    );
     const popover = await this.popoverController.create({
       component: SettingsComponent,
       cssClass: 'my-custom-class',
@@ -70,13 +70,13 @@ export class DashboardComponent implements OnInit {
     await popover.present();
 
     popover.onDidDismiss<any>().then(data => {
-        console.log('entra aqui', data);
-        if (data && data.data === 'logout') {
-          this.store.dispatch(LogoutAction);
-          // trigger here the method dependind on the popover response
-        } else if (data && data.data === 'darkmode') {
+      console.log('entra aqui', data);
+      if (data && data.data === 'logout') {
+        this.store.dispatch(LogoutAction);
+        // trigger here the method dependind on the popover response
+      } else if (data && data.data === 'darkmode') {
 
-        }
+      }
     });
   }
 }

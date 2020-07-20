@@ -32,9 +32,6 @@
       "tags": [],
       "implicitDependencies": ["pong-score"]
     },
-    "api": {
-      "tags": []
-    },
     "api-interfaces": {
       "tags": []
     },
@@ -42,6 +39,9 @@
       "tags": []
     },
     "shared": {
+      "tags": []
+    },
+    "api": {
       "tags": []
     }
   }

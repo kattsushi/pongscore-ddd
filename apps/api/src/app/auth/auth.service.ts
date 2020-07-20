@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../user/user.interface';
-import { LoginUserDto, JwtPayload } from '@pongscore/api-interfaces';
+import { LoginUserDto, JwtPayload, LoginUserResponse } from '@pongscore/api-interfaces';
 
 /**
  * Auth Service
@@ -22,7 +22,7 @@ export class AuthService {
     private jwtService: JwtService
   ) { }
 
-  async validateUserByPassword(loginAttempt: LoginUserDto) {
+  async validateUserByPassword(loginAttempt: LoginUserDto): Promise<LoginUserResponse> {
     // This will be used for the initial login
     const userToAttempt: any = await this.usersService.findOneByEmail(loginAttempt.email);
     return new Promise((resolve) => {
@@ -58,7 +58,7 @@ export class AuthService {
    * @param user
    * @returns
    */
-  createJwtPayload(user: User) {
+  createJwtPayload(user: User): LoginUserResponse {
     const data: JwtPayload = {
       email: user.email
     };

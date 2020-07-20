@@ -13,6 +13,7 @@ import { ModalComponent } from '../modal/modal.component';
 @Component({
   selector: 'pongscore-auth',
   template: `
+    <pongscore-header></pongscore-header>
     <ion-content class="ion-padding">
       <ion-grid>
         <ion-row>
@@ -118,15 +119,22 @@ export class AuthComponent implements OnInit, AfterContentInit {
       this.slides.lockSwipes(event.matches);
     }
   }
-
+  /**
+   * Go to login page
+   */
   goToLoginPage() {
     this.slides?.slideTo(0);
   }
-
+  /**
+   * Go to register page
+   */
   goToRegisterPage() {
     this.slides?.slideTo(1);
   }
-
+  /**
+   * Go to forgot password page
+   * @returns
+   */
   async goToForgotPasswordPage() {
     if (this.breakpointObserver.isMatched('(min-width: 576px)')) {
       const registerModal = await this.modalController.create({

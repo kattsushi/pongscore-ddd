@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Store, Select } from '@ngxs/store';
+import { LogoutAction } from '../auth/application/store/auth.actions';
+import { AuthState } from '../auth/application/store/auth.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pongscore-tab1',
@@ -6,7 +10,13 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+  @Select(AuthState.isAuthenticated)
+  isAuthenticated$!: Observable<boolean>;
+  constructor(
+    private store: Store
+  ) {}
 
-  constructor() {}
-
+  public logout() {
+    this.store.dispatch(new LogoutAction());
+  }
 }

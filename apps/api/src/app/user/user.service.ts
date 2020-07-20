@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.interface';
-import { CreateUserDTO } from './create-user.dto';
+import { CreateUserDTO } from '@pongscore/api-interfaces';
 /**
  * User Service
  *
@@ -24,12 +24,12 @@ export class UserService {
    * @returns one
    */
   async findOne(username: string): Promise<User | null> {
-    const user = await this.userModel.findOne({username: username});
+    const user = await this.userModel.findOne({ username: username });
     return user;
   }
 
   async findOneByEmail(email: string | undefined): Promise<User | null> {
-    const user = await this.userModel.findOne({email});
+    const user = await this.userModel.findOne({ email });
     return user;
   }
 
@@ -70,7 +70,7 @@ export class UserService {
    */
   async updateUser(userID: string, createUserDTO: CreateUserDTO): Promise<User | null> {
     const updatedUser = await this.userModel
-        .findByIdAndUpdate(userID, createUserDTO, { new: true });
+      .findByIdAndUpdate(userID, createUserDTO, { new: true });
     return updatedUser;
   }
   /**

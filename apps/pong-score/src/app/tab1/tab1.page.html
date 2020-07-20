@@ -1,20 +1,11 @@
-<ion-header>
-  <ion-toolbar color="light">
-    <ion-buttons slot="start">
-      <ion-button color="dark">
-        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-    <ion-title>Instagram</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button color="dark">
-        <ion-icon slot="icon-only" name="send-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<pongscore-header (doLogout)="logout()" [logged]="isAuthenticated$ | async">
+  <ion-title>PongScore.com</ion-title>
+  <ion-buttons slot="end">
+    <ion-button color="dark">
+      <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</pongscore-header>
 
 <ion-content>
   <div class="story-list">

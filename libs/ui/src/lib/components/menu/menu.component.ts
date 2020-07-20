@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+/**
+ * Component
+ */
 @Component({
   selector: 'pongscore-menu',
   template: `
@@ -25,6 +27,9 @@ import { Component, OnInit, Input } from '@angular/core';
   `]
 })
 export class MenuComponent implements OnInit {
+  /**
+   * Input  of menu component
+   */
   @Input()
   contentId!: string;
   constructor() { }

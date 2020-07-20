@@ -1,5 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { CreateUserDTO } from '@pongscore/api-interfaces';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Validators as CustomValidators } from '../../application/validators';
+import { Store } from '@ngxs/store';
+import { RegisterAction } from '../../application/store/auth.actions';
 
 /**
  * Register
@@ -19,25 +24,29 @@ import { ModalController } from '@ionic/angular';
       </ion-row>
       <ion-row>
         <ion-col size="12">
-          <form #form="ngForm" (ngSubmit)="register(form)" method="post">
+          <form #form="ngForm" [formGroup]="registerForm" (ngSubmit)="register(form)" method="post">
             <ion-item>
               <ion-label position="floating">First Name</ion-label>
-              <ion-input ngModel name="fName"></ion-input>
+              <ion-input ngModel name="first_name" formControlName="first_name"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Last Name</ion-label>
-              <ion-input ngModel name="lName"></ion-input>
+              <ion-input ngModel name="last_name" formControlName="last_name"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Email</ion-label>
-              <ion-input type="email" ngModel name="email"></ion-input>
+              <ion-input type="email" ngModel name="email" formControlName="email"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Password</ion-label>
-              <ion-input type="password" ngModel name="password"></ion-input>
+              <ion-input type="password" ngModel name="password" formControlName="password"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Confirm Password</ion-label>
+              <ion-input type="password" ngModel name="confirm_password" formControlName="confirm_password"></ion-input>
             </ion-item>
 
             <ion-button type="submit" expand="full" color="secondary">Register</ion-button>
@@ -73,15 +82,43 @@ import { ModalController } from '@ionic/angular';
   `]
 })
 export class RegisterComponent implements OnInit {
-
+  registerForm!: FormGroup;
   @Output() goToLogin: EventEmitter<string> = new EventEmitter();
-/**
- * Creates an instance of register component.
- * @param modalController
- */
-constructor(private modalController: ModalController) { }
-
+  /**
+   * Creates an instance of register component.
+   * @param modalController
+   */
+  constructor(
+    private store: Store,
+    private modalController: ModalController,
+    private formBuilder: FormBuilder
+  ) { }
+  /**
+   * on init
+   */
   ngOnInit(): void {
+    this.registerForm = this.formBuilder.group({
+      first_name: ['', [Validators.required]],
+      last_name: ['', [Validators.required]],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
+      password: ['', Validators.compose([
+        // 1. Password Field is Required
+        Validators.required,
+        // 2. check whether the entered password has a number
+        CustomValidators.patternValidator(/\d/, { hasNumber: true }),
+        // 3. check whether the entered password has upper case letter
+        CustomValidators.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
+        // 4. check whether the entered password has a lower-case letter
+        CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
+
+        // 6. Has a minimum length of 8 characters
+        Validators.minLength(8)])
+      ],
+      confirm_password: ['', Validators.compose([Validators.required])]
+    }, {
+      // check whether our password and confirm password match
+      validator: CustomValidators.passwordMatchValidator
+    });
   }
   /**
    * Dismiss register
@@ -93,8 +130,12 @@ constructor(private modalController: ModalController) { }
    * Registers register component
    * @param form
    */
-  register(form: any): void {
-
+  async register(form: { value: CreateUserDTO }) {
+    if (this.registerForm.valid) {
+      await this.store.dispatch(new RegisterAction(form.value));
+      this.registerForm.reset();
+      this.goToLogin.emit();
+      console.log('form', this.registerForm.value);
+    }
   }
-
 }

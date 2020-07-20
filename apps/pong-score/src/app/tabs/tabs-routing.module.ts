@@ -21,11 +21,11 @@ const routes: Routes = [
       },
       {
         path: 'tab4',
-        loadChildren: () => import('../tab4/tab4.module').then( m => m.Tab4PageModule)
+        loadChildren: () => import('../tab4/tab4.module').then(m => m.Tab4PageModule)
       },
       {
         path: 'tab5',
-        loadChildren: () => import('../tab5/tab5.module').then( m => m.Tab5PageModule)
+        loadChildren: () => import('../tab5/tab5.module').then(m => m.Tab5PageModule)
       },
       {
         path: '',
@@ -45,4 +45,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }

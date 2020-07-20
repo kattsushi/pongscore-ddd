@@ -5,6 +5,7 @@ import { LogoComponent } from './components/logo/logo.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from './components/menu/menu.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import { MenuComponent } from './components/menu/menu.component';
     FormsModule,
     IonicModule
   ],
-  declarations: [LogoComponent, SettingsComponent, MenuComponent],
-  exports: [LogoComponent, SettingsComponent, MenuComponent],
+  declarations: [LogoComponent, SettingsComponent, MenuComponent, HeaderComponent],
+  exports: [LogoComponent, SettingsComponent, MenuComponent, HeaderComponent],
 })
-export class UiModule {}
+export class UiModule { }

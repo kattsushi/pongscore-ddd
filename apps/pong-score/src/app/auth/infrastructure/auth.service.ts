@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { LoginUserDto, LoginUserResponse, CreateUserDTO } from '@pongscore/api-interfaces';
 /**
  * Auth Service
  *
@@ -15,19 +16,19 @@ export class AuthService {
     private http: HttpClient
   ) { }
   /**
-   * Logouts auth service
+   * Register auth service
    * @param token
    * @returns logout
    */
-  logout(token: string | null): Observable<any> {
-    throw new Error("Method not implemented.");
+  register(payload: CreateUserDTO) {
+    return this.http.post<LoginUserResponse>('user/create', payload);
   }
   /**
    * Logins auth service
    * @param payload
    * @returns login
    */
-  login({ email, password }: { email: string; password: string; }): Observable<any> {
-    return this.http.post('http://localhost:3333/auth/login', { email, password });
+  login({ email, password }: LoginUserDto): Observable<LoginUserResponse> {
+    return this.http.post<LoginUserResponse>('auth/login', { email, password });
   }
 }

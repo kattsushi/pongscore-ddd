@@ -13,7 +13,7 @@ import { AppModule } from './app/app.module';
  * Bootstrapp App
  */
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { logger: true });
+  const app = await NestFactory.create(AppModule);
   app.enableCors();
   const options = new DocumentBuilder()
     .setTitle('PongScore')

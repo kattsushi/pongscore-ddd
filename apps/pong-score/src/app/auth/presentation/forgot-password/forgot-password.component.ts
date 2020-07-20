@@ -32,9 +32,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class ForgotPasswordComponent implements OnInit {
   @Output() goToLogin: EventEmitter<string> = new EventEmitter();
-  constructor(
-
-    ) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
@@ -42,6 +40,4 @@ export class ForgotPasswordComponent implements OnInit {
   sendRequest(ev: any) {
 
   }
-
-
 }
