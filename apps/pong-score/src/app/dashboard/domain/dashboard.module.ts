@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { TabsPageRoutingModule } from './tabs-routing.module';
+import { TabsPageRoutingModule } from './dashboard.routing';
 
-import { TabsPage } from './tabs.page';
+import { DashboardPage } from '../presentation/dashboard/dashboard.page';
 
 @NgModule({
   imports: [
@@ -14,6 +14,6 @@ import { TabsPage } from './tabs.page';
     FormsModule,
     TabsPageRoutingModule
   ],
-  declarations: [TabsPage]
+  declarations: [DashboardPage]
 })
-export class TabsPageModule { }
+export class DashboardModule { }

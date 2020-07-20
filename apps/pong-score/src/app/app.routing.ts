@@ -7,14 +7,9 @@ const routes: Routes = [{
   loadChildren: () => import('./auth/domain/auth.module').then(m => m.AuthModule)
 }, {
   path: 'dashboard',
-  loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+  loadChildren: () => import('./dashboard/domain/dashboard.module').then(m => m.DashboardModule),
   canActivate: [AuthGuard]
 }, {
-  path: 'tabs',
-  loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
-  canActivate: [AuthGuard]
-},
-{
   path: 'comments',
   loadChildren: () => import('./comments/comments.module').then(m => m.CommentsPageModule),
   canActivate: [AuthGuard]

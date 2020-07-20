@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { LogoutAction } from '../auth/application/store/auth.actions';
-import { AuthState } from '../auth/application/store/auth.state';
+import { LogoutAction } from '../../../auth/application/store/auth.actions';
+import { AuthState } from '../../../auth/application/store/auth.state';
 import { Observable } from 'rxjs';
 
 @Component({
