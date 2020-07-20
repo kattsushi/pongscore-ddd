@@ -62,8 +62,14 @@ import { ModalComponent } from '../modal/modal.component';
     }
     @media (min-width: 1000px) {
       ion-col {
-        padding-left: 100px;
-        padding-right: 100px;
+        padding-left: 50px;
+        padding-right: 50px;
+      }
+    }
+    @media (min-width: 1500px) {
+      ion-col {
+        padding-left: 210px;
+        padding-right: 210px;
       }
     }
   `]

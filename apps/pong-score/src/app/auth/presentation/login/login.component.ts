@@ -22,7 +22,7 @@ import { Validators as CustomValidators } from '../../application/validators';
       </ion-row>
       <ion-row>
         <ion-col size="12">
-          <form #form="ngForm" [formGroup]="loginForm" (ngSubmit)="login(form)" method="post">
+          <form #form="ngForm" [formGroup]="loginForm" (ngSubmit)="login()" method="post">
             <ion-item>
               <ion-label position="floating">Email</ion-label>
               <ion-input ngModel type="email" name="email" formControlName="email"></ion-input>

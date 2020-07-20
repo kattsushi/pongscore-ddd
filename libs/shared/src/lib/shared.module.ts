@@ -21,7 +21,7 @@ import { ApiInterceptorService } from './interceptors/api-interceptor.service';
   ]
 })
 export class SharedModule {
-  static forRoot(environment: any): ModuleWithProviders {
+  static forRoot(environment: any): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
       providers: [
