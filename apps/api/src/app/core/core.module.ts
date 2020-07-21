@@ -4,16 +4,17 @@ import { NodemailerModule } from '@crowdlinker/nestjs-mailer';
 import { NodemailerDrivers } from '@crowdlinker/nestjs-mailer';
 import { NodemailerOptions } from '@crowdlinker/nestjs-mailer';
 import { MailerService } from './mailer/mailer.service';
+import { environment } from '../../environments/environment';
 
 @Module({
   imports: [
     NodemailerModule.forRoot({
       transport: {
-        host: 'smtp.mailtrap.io',
-        port: 2525,
+        host: environment.mail.host,
+        port: environment.mail.port,
         auth: {
-          user: 'ccdff3b99c83ec',
-          pass: 'a700a7eafe1e28',
+          user: environment.mail.user,
+          pass: environment.mail.pass,
         },
       },
       defaults: {

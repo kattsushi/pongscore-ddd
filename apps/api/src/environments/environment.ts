@@ -21,10 +21,10 @@ export const environment = {
     'expiresIn': 36000000
   },
   mail: {
-    host: '<smtp-host>',
-    port: '<port>',
+    host: 'smtp.mailtrap.io',
+    port: 2525,
     secure: false,
-    user: '<username>',
-    pass: '<password>'
+    user: 'ccdff3b99c83ec',
+    pass: 'a700a7eafe1e28'
   }
 };
