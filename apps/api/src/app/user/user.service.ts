@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './user.interface';
-import { CreateUserDTO } from '@pongscore/api-interfaces';
+import { hash } from 'bcrypt';
+import { CreateUserDto, User } from '@pongscore/api-interfaces';
+const saltRounds = 10;
 /**
  * User Service
  *
@@ -11,12 +12,11 @@ import { CreateUserDTO } from '@pongscore/api-interfaces';
  */
 @Injectable()
 export class UserService {
-
   /**
    * Creates an instance of user service.
    * @param userModel
    */
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) { }
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   /**
    * Finds one
@@ -57,7 +57,7 @@ export class UserService {
    * @param createUserDTO
    * @returns user
    */
-  async addUser(createUserDTO: CreateUserDTO): Promise<User> {
+  async addUser(createUserDTO: CreateUserDto): Promise<User> {
     const newUser = await new this.userModel(createUserDTO);
     return newUser.save();
   }
@@ -68,9 +68,15 @@ export class UserService {
    * @param createUserDTO
    * @returns user
    */
-  async updateUser(userID: string, createUserDTO: CreateUserDTO): Promise<User | null> {
-    const updatedUser = await this.userModel
-      .findByIdAndUpdate(userID, createUserDTO, { new: true });
+  async updateUser(
+    userID: string,
+    createUserDTO: CreateUserDto
+  ): Promise<User | null> {
+    const updatedUser = await this.userModel.findByIdAndUpdate(
+      userID,
+      createUserDTO,
+      { new: true }
+    );
     return updatedUser;
   }
   /**
@@ -81,5 +87,21 @@ export class UserService {
   async deleteUser(userID: string): Promise<any> {
     const deletedUser = await this.userModel.findByIdAndRemove(userID);
     return deletedUser;
+  }
+  /**
+   * Sets password
+   * @param email
+   * @param newPassword
+   * @returns password
+   */
+  async setPassword(email: string, newPassword: string): Promise<boolean> {
+    const userFromDb = await this.userModel.findOne({ email: email });
+    if (!userFromDb)
+      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    userFromDb.password = await hash(newPassword, saltRounds);
+
+    await userFromDb.save();
+    return true;
   }
 }

@@ -1,4 +1,8 @@
-import { LoginUserDto, CreateUserDTO } from '@pongscore/api-interfaces';
+import {
+  LoginUserDto,
+  CreateUserDto,
+  ResetPasswordDto,
+} from '@pongscore/api-interfaces';
 
 /**
  * Auth state model
@@ -12,7 +16,7 @@ export interface AuthStateModel {
  */
 export class LoginAction {
   static readonly type = '[Auth] Login';
-  constructor(public payload: LoginUserDto) { }
+  constructor(public payload: LoginUserDto) {}
 }
 /**
  * Logout
@@ -26,5 +30,13 @@ export class LogoutAction {
  */
 export class RegisterAction {
   static readonly type = '[Auth] Register';
-  constructor(public payload: CreateUserDTO) { }
+  constructor(public payload: CreateUserDto) {}
+}
+
+/**
+ * Login
+ */
+export class ResetPasswordAction {
+  static readonly type = '[Auth] Reset Password';
+  constructor(public payload: ResetPasswordDto) {}
 }

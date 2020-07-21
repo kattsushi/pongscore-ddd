@@ -1,8 +1,26 @@
-import { Controller, Get, Res, HttpStatus, Post, Body, Put, Query, NotFoundException, Delete, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Res,
+  HttpStatus,
+  Post,
+  Body,
+  Put,
+  Query,
+  NotFoundException,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CreateUserDTO } from '@pongscore/api-interfaces';
+import {
+  CreateUserDto,
+  IResponse,
+  ResponseSuccess,
+  ResponseError,
+  User,
+} from '@pongscore/api-interfaces';
 
 /**
  * User Controller
@@ -17,7 +35,7 @@ export class UserController {
    * Creates an instance of user controller.
    * @param userService
    */
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   /**
    * Posts user controller
@@ -29,12 +47,16 @@ export class UserController {
   @Post('/create')
   @ApiOperation({ summary: 'Create a User' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  async addUser(@Res() res: Response, @Body() createUserDTO: CreateUserDTO) {
-    const user = await this.userService.addUser(createUserDTO);
-    return res.status(HttpStatus.OK).json({
-      message: "User has been created successfully",
-      user
-    });
+  async addUser(
+    @Res() res: Response,
+    @Body() createUserDTO: CreateUserDto
+  ): Promise<IResponse<User>> {
+    try {
+      const user = await this.userService.addUser(createUserDTO);
+      return new ResponseSuccess('USER.CREATED', user);
+    } catch (error) {
+      return new ResponseError('USER.ERROR', error);
+    }
   }
 
   /**
@@ -61,7 +83,7 @@ export class UserController {
   @ApiOperation({ summary: 'Get a User By Id' })
   @ApiResponse({
     status: 200,
-    description: 'The found record'
+    description: 'The found record',
   })
   async getUser(@Res() res: Response, @Param('userID') userID: string) {
     const user = await this.userService.getUser(userID);
@@ -79,12 +101,16 @@ export class UserController {
    */
   @Put('/update')
   @ApiOperation({ summary: 'Update a User' })
-  async updateUser(@Res() res: Response, @Query('userID') userID: string, @Body() createUserDTO: CreateUserDTO) {
+  async updateUser(
+    @Res() res: Response,
+    @Query('userID') userID: string,
+    @Body() createUserDTO: CreateUserDto
+  ) {
     const user = await this.userService.updateUser(userID, createUserDTO);
     if (!user) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json({
       message: 'User has been successfully updated',
-      user
+      user,
     });
   }
 
@@ -102,7 +128,7 @@ export class UserController {
     if (!user) throw new NotFoundException('User does not exist');
     return res.status(HttpStatus.OK).json({
       message: 'User has been deleted',
-      user
+      user,
     });
   }
 }
