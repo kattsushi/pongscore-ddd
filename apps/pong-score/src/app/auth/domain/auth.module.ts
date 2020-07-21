@@ -24,7 +24,7 @@ const COMPONENTS = [
   AuthComponent,
   ForgotPasswordComponent,
   ModalComponent,
-  ResetPasswordComponent
+  ResetPasswordComponent,
 ];
 
 /**
@@ -41,13 +41,11 @@ const COMPONENTS = [
     SharedModule.forRoot(environment),
     IonicModule.forRoot({
       rippleEffect: false,
-      mode: 'md'
+      mode: 'md',
     }),
-    NgxsModule.forFeature([AuthState])
+    NgxsModule.forFeature([AuthState]),
   ],
-  declarations: [
-    ...COMPONENTS
-  ],
-  providers: [AuthState, AuthGuard]
+  declarations: [...COMPONENTS],
+  providers: [AuthState, AuthGuard],
 })
-export class AuthModule { }
+export class AuthModule {}

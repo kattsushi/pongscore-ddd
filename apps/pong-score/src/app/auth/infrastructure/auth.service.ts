@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { LoginUserDto, LoginUserResponse, CreateUserDTO, ResetPasswordDto } from '@pongscore/api-interfaces';
+import {
+  LoginUserDto,
+  LoginUserResponse,
+  CreateUserDto,
+  ResetPasswordDto,
+  IResponse,
+  User,
+} from '@pongscore/api-interfaces';
 /**
  * Auth Service
  *
@@ -9,33 +16,47 @@ import { LoginUserDto, LoginUserResponse, CreateUserDTO, ResetPasswordDto } from
  * @class AuthService
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
   /**
    * Register auth service
    * @param token
    * @returns logout
    */
-  register(payload: CreateUserDTO) {
-    return this.http.post<LoginUserResponse>('user/create', payload);
+  register(payload: CreateUserDto): Observable<IResponse<User>> {
+    return this.http.post<IResponse<User>>('auth/email/register', payload);
   }
   /**
    * Logins auth service
    * @param payload
    * @returns login
    */
-  login({ email, password }: LoginUserDto): Observable<LoginUserResponse> {
-    return this.http.post<LoginUserResponse>('auth/login', { email, password });
+  login({
+    email,
+    password,
+  }: LoginUserDto): Observable<IResponse<LoginUserResponse>> {
+    return this.http.post<IResponse<LoginUserResponse>>('auth/email/login', {
+      email,
+      password,
+    });
   }
   /**
    * Resets password
    * @param payload
    */
-  resetPassword( { currentPassword, email, newPassword, newPasswordToken }: ResetPasswordDto): Observable<LoginUserResponse> {
-    return this.http.post<LoginUserResponse>('auth/email/reset-password', { currentPassword, email, newPassword, newPasswordToken });
+  resetPassword({
+    currentPassword,
+    email,
+    newPassword,
+    newPasswordToken,
+  }: ResetPasswordDto): Observable<IResponse<boolean>> {
+    return this.http.post<IResponse<boolean>>('auth/email/reset-password', {
+      currentPassword,
+      email,
+      newPassword,
+      newPasswordToken,
+    });
   }
 }

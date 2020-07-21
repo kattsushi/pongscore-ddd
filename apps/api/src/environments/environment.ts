@@ -1,4 +1,3 @@
-
 /**
  * Development Environment
  */
@@ -10,21 +9,21 @@ export const environment = {
     host: 'pongscore.k4af9.mongodb.net',
     port: 27017,
     database: 'pongscore-dev',
-    authSource: null
+    authSource: null,
   },
   host: {
-    url: '<server-url>',
-    port: 3000
+    url: 'http://localhost',
+    port: 3333,
   },
   jwt: {
     secretOrKey: 'secret',
-    'expiresIn': 36000000
+    expiresIn: 36000000,
   },
   mail: {
     host: 'smtp.mailtrap.io',
     port: 2525,
     secure: false,
-    user: 'ccdff3b99c83ec',
-    pass: 'a700a7eafe1e28'
-  }
+    user: 'cb6bc14dd98c62',
+    pass: '10a9b36ab70a3f',
+  },
 };

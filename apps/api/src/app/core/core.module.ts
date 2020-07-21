@@ -5,6 +5,7 @@ import { NodemailerDrivers } from '@crowdlinker/nestjs-mailer';
 import { NodemailerOptions } from '@crowdlinker/nestjs-mailer';
 import { MailerService } from './mailer/mailer.service';
 import { environment } from '../../environments/environment';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -20,9 +21,9 @@ import { environment } from '../../environments/environment';
       defaults: {
         from: 'Hello @Crowdlinker <hello@crowdlinker.com>',
       },
-    } as NodemailerOptions<NodemailerDrivers.SMTP>)
+    } as NodemailerOptions<NodemailerDrivers.SMTP>),
   ],
-  providers: [MailerService],
-  exports:[MailerService]
+  providers: [MailerService, LoggerMiddleware],
+  exports: [MailerService, LoggerMiddleware],
 })
 export class CoreModule {}

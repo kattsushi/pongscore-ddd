@@ -22,20 +22,39 @@ import { Validators as CustomValidators } from '../../application/validators';
       </ion-row>
       <ion-row>
         <ion-col size="12">
-          <form #form="ngForm" [formGroup]="loginForm" (ngSubmit)="login()" method="post">
+          <form
+            #form="ngForm"
+            [formGroup]="loginForm"
+            (ngSubmit)="login()"
+            method="post"
+          >
             <ion-item>
               <ion-label position="floating">Email</ion-label>
-              <ion-input ngModel type="email" name="email" formControlName="email"></ion-input>
+              <ion-input
+                ngModel
+                type="email"
+                name="email"
+                formControlName="email"
+              ></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Password</ion-label>
-              <ion-input ngModel type="password" name="password" formControlName="password"></ion-input>
+              <ion-input
+                ngModel
+                type="password"
+                name="password"
+                formControlName="password"
+              ></ion-input>
             </ion-item>
 
-            <p text-right (click)="goToForgotPassword.emit()">Forgot Password?</p>
+            <p text-right (click)="goToForgotPassword.emit()">
+              Forgot Password?
+            </p>
 
-            <ion-button type="submit" expand="full" color="primary">Login</ion-button>
+            <ion-button type="submit" expand="full" color="primary"
+              >Login</ion-button
+            >
           </form>
         </ion-col>
       </ion-row>
@@ -43,31 +62,37 @@ import { Validators as CustomValidators } from '../../application/validators';
         <ion-col size="12">
           <div class="register">
             <p text-center>Don't have a account?</p>
-            <ion-button expand="full" color="secondary" (click)="goToRegister.emit()">Register</ion-button>
+            <ion-button
+              expand="full"
+              color="secondary"
+              (click)="goToRegister.emit()"
+              >Register</ion-button
+            >
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
   `,
-  styles: [`
-    ion-img {
-      width: 100px;
-      margin: 0 auto;
-    }
-    :host {
-      width: 100%;
-      max-width: 500px;
-    }
-    @media (min-width: 576px) {
-      .register {
-        display: none;
+  styles: [
+    `
+      ion-img {
+        width: 100px;
+        margin: 0 auto;
       }
-      pongscore-logo {
-        display: none;
+      :host {
+        width: 100%;
+        max-width: 500px;
       }
-    }
-
-  `]
+      @media (min-width: 576px) {
+        .register {
+          display: none;
+        }
+        pongscore-logo {
+          display: none;
+        }
+      }
+    `,
+  ],
 })
 export class LoginComponent implements OnInit {
   /**
@@ -86,27 +111,27 @@ export class LoginComponent implements OnInit {
    * Creates an instance of login component.
    * @param modalController
    */
-  constructor(
-    private store: Store,
-    private formBuilder: FormBuilder
-  ) { }
+  constructor(private store: Store, private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
-      password: ['', Validators.compose([
-        // 1. Password Field is Required
-        Validators.required,
-        // 2. check whether the entered password has a number
-        CustomValidators.patternValidator(/\d/, { hasNumber: true }),
-        // 3. check whether the entered password has upper case letter
-        CustomValidators.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
-        // 4. check whether the entered password has a lower-case letter
-        CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
+      password: [
+        '',
+        Validators.compose([
+          // 1. Password Field is Required
+          Validators.required,
+          // 2. check whether the entered password has a number
+          CustomValidators.patternValidator(/\d/, { hasNumber: true }),
+          // 3. check whether the entered password has upper case letter
+          CustomValidators.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
+          // 4. check whether the entered password has a lower-case letter
+          CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
 
-        // 6. Has a minimum length of 8 characters
-        Validators.minLength(8)])
-      ]
+          // 6. Has a minimum length of 8 characters
+          Validators.minLength(8),
+        ]),
+      ],
     });
   }
   /**

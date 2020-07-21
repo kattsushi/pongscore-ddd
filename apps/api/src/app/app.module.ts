@@ -17,7 +17,7 @@ import { CoreModule } from './core/core.module';
     MongooseModule.forRoot(
       `mongodb+srv://${environment.db.user}:${environment.db.pass}@${environment.db.host}/${environment.db.database}?retryWrites=true&w=majority`,
       { useNewUrlParser: true }
-    )
+    ),
   ],
   providers: [],
 })

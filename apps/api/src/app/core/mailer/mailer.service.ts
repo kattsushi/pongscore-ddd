@@ -7,7 +7,7 @@ export interface MailOptions {
   to: string; // list of receivers (separated by ,)
   subject: string;
   text: string;
-  html: string;  // html body
+  html: string; // html body
 }
 /**
  *
@@ -20,7 +20,9 @@ export class MailerService {
    * Creates an instance of mailer service.
    * @param nodemailer
    */
-  constructor(private readonly nodemailer: Nodemailer<NodemailerDrivers.SMTP>) { }
+  constructor(
+    private readonly nodemailer: Nodemailer<NodemailerDrivers.SMTP>
+  ) {}
   /**
    * Mails mailer service
    * @param mailOptions
