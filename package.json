@@ -46,6 +46,7 @@
     "@angular/router": "^10.0.4",
     "@capacitor/android": "^2.2.0",
     "@capacitor/core": "^2.2.0",
+    "@crowdlinker/nestjs-mailer": "0.0.3",
     "@ionic/angular": "^5.2.2",
     "@ionic/storage": "^2.2.0",
     "@nestjs/common": "^7.0.0",

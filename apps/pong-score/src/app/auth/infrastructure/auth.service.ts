@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { LoginUserDto, LoginUserResponse, CreateUserDTO } from '@pongscore/api-interfaces';
+import { LoginUserDto, LoginUserResponse, CreateUserDTO, ResetPasswordDto } from '@pongscore/api-interfaces';
 /**
  * Auth Service
  *
@@ -30,5 +30,12 @@ export class AuthService {
    */
   login({ email, password }: LoginUserDto): Observable<LoginUserResponse> {
     return this.http.post<LoginUserResponse>('auth/login', { email, password });
+  }
+  /**
+   * Resets password
+   * @param payload
+   */
+  resetPassword( { currentPassword, email, newPassword, newPasswordToken }: ResetPasswordDto): Observable<LoginUserResponse> {
+    return this.http.post<LoginUserResponse>('auth/email/reset-password', { currentPassword, email, newPassword, newPasswordToken });
   }
 }

@@ -15,7 +15,18 @@ import { AuthGuard } from '../application/auth.guard';
 import { AuthComponent } from '../presentation/auth/auth.component';
 import { ForgotPasswordComponent } from '../presentation/forgot-password/forgot-password.component';
 import { ModalComponent } from '../presentation/modal/modal.component';
+import { ResetPasswordComponent } from '../presentation/reset-password/reset-password.component';
 import { environment } from '../../../environments/environment';
+
+const COMPONENTS = [
+  LoginComponent,
+  RegisterComponent,
+  AuthComponent,
+  ForgotPasswordComponent,
+  ModalComponent,
+  ResetPasswordComponent
+];
+
 /**
  * Auth Ng module
  */
@@ -34,7 +45,9 @@ import { environment } from '../../../environments/environment';
     }),
     NgxsModule.forFeature([AuthState])
   ],
-  declarations: [LoginComponent, RegisterComponent, AuthComponent, ForgotPasswordComponent, ModalComponent],
+  declarations: [
+    ...COMPONENTS
+  ],
   providers: [AuthState, AuthGuard]
 })
 export class AuthModule { }

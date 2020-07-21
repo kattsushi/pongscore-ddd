@@ -1,8 +1,14 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserService } from '../user/user.service';
+import { Model } from 'mongoose';
+import { Injectable, UnauthorizedException, HttpStatus, HttpException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import { compare } from 'bcrypt';
+import { LoginUserDto, JwtPayload, LoginUserResponse, ForgottenPassword } from '@pongscore/api-interfaces';
+import { environment } from './../../environments/environment';
+import { UserService } from '../user/user.service';
+
 import { User } from '../user/user.interface';
-import { LoginUserDto, JwtPayload, LoginUserResponse } from '@pongscore/api-interfaces';
+import { MailerService, MailOptions } from '../core/mailer/mailer.service';
 
 /**
  * Auth Service
@@ -19,7 +25,9 @@ export class AuthService {
    */
   constructor(
     private usersService: UserService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private mailer: MailerService,
+    @InjectModel('ForgottenPassword') private readonly forgottenPasswordModel: Model<ForgottenPassword>,
   ) { }
 
   async validateUserByPassword(loginAttempt: LoginUserDto): Promise<LoginUserResponse> {
@@ -68,5 +76,80 @@ export class AuthService {
       expiresIn: 3600,
       token: jwt
     };
+  }
+  /**
+   * Creates forgotten password token
+   * @param email
+   * @returns forgotten password token
+   */
+  async createForgottenPasswordToken(email: string): Promise<ForgottenPassword> {
+    const forgottenPassword = await this.forgottenPasswordModel.findOne({ email: email });
+    if (forgottenPassword && ((new Date().getTime() - forgottenPassword.timestamp.getTime()) / 60000 < 15)) {
+      throw new HttpException('RESET_PASSWORD.EMAIL_SENDED_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+    } else {
+      const forgottenPasswordModel = await this.forgottenPasswordModel.findOneAndUpdate(
+        { email: email },
+        {
+          email: email,
+          newPasswordToken: (Math.floor(Math.random() * (9000000)) + 1000000).toString(), //Generate 7 digits number,
+          timestamp: new Date()
+        },
+        { upsert: true, new: true }
+      );
+      if (forgottenPasswordModel) {
+        return forgottenPasswordModel;
+      } else {
+        throw new HttpException('LOGIN.ERROR.GENERIC_ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+  }
+  /**
+   * Sends email forgot password
+   * @param email
+   * @returns email forgot password
+   */
+  async sendEmailForgotPassword(email: string): Promise<boolean> {
+    const userFromDb = await this.usersService.findOneByEmail(email);
+    if (!userFromDb) throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    const tokenModel = await this.createForgottenPasswordToken(email);
+
+    if (tokenModel && tokenModel.newPasswordToken) {
+      const mailOptions: MailOptions = {
+        from: '"Company" <' + environment.mail.user + '>',
+        to: email, // list of receivers (separated by ,)
+        subject: 'Frogotten Password',
+        text: 'Forgot Password',
+        html: `
+          Hi! <br><br> If you requested to reset your password<br><br>
+          <a href=${environment.host.url}:${environment.host.port}/auth/email/reset-password/${tokenModel.newPasswordToken}>
+            Click here
+          </a>
+        `  // html body
+      };
+      return this.mailer.mail(mailOptions);
+    } else {
+      throw new HttpException('REGISTER.USER_NOT_REGISTERED', HttpStatus.FORBIDDEN);
+    }
+  }
+  /**
+   * Checks password
+   * @param email
+   * @param password
+   * @returns
+   */
+  async checkPassword(email: string, password: string) {
+    const userFromDb = await this.usersService.findOneByEmail(email);
+    if (!userFromDb) throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    return await compare(password, userFromDb.password);
+  }
+
+  /**
+   * Gets forgotten password model
+   * @param newPasswordToken
+   * @returns forgotten password model
+   */
+  async getForgottenPasswordModel(newPasswordToken: string): Promise<ForgottenPassword | null> {
+    return await this.forgottenPasswordModel.findOne({ newPasswordToken: newPasswordToken });
   }
 }

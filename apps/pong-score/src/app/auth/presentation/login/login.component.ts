@@ -111,7 +111,6 @@ export class LoginComponent implements OnInit {
   }
   /**
    * Logins login component
-   * @param form
    */
   login(): void {
     if (this.loginForm.valid) {

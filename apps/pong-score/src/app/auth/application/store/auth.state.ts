@@ -1,5 +1,5 @@
 import { State, Selector, Action, StateContext } from '@ngxs/store';
-import { AuthStateModel, LogoutAction, LoginAction, RegisterAction } from './auth.actions';
+import { AuthStateModel, LogoutAction, LoginAction, RegisterAction, ResetPasswordAction } from './auth.actions';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { AuthService } from '../../infrastructure/auth.service';
@@ -99,5 +99,15 @@ export class AuthState {
       token: null,
       email: null
     });
+  }
+
+    /**
+   * Actions auth state
+   * @param ctx
+   * @returns
+   */
+  @Action(ResetPasswordAction)
+  resetPassword({ setState }: StateContext<AuthStateModel>, action: ResetPasswordAction) {
+    return this.authService.resetPassword(action.payload);
   }
 }

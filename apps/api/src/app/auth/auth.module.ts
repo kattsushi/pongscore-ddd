@@ -6,6 +6,9 @@ import { PassportModule } from '@nestjs/passport';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
+import { CoreModule } from '../core/core.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ForgottenPasswordSchema } from './schemas/forgotten.schema';
 
 /**
  * Auth Module
@@ -15,7 +18,11 @@ import { AuthController } from './auth.controller';
  */
 @Module({
   imports: [
+    CoreModule,
     UserModule,
+    MongooseModule.forFeature([
+      { name: 'ForgottenPassword', schema: ForgottenPasswordSchema }
+    ]),
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     JwtModule.register({
       secret: jwtConstants.secret,
