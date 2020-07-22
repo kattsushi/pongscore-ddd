@@ -16,8 +16,8 @@ export const environment = {
     port: 3333,
   },
   jwt: {
-    secretOrKey: 'secret',
-    expiresIn: 36000000,
+    secretOrKey: 'secretKey',
+    expiresIn: '60s',
   },
   mail: {
     host: 'smtp.mailtrap.io',

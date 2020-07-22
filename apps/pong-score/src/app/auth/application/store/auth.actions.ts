@@ -34,9 +34,17 @@ export class RegisterAction {
 }
 
 /**
- * Login
+ * ResetPasswordAction
  */
 export class ResetPasswordAction {
   static readonly type = '[Auth] Reset Password';
   constructor(public payload: ResetPasswordDto) {}
+}
+
+/**
+ * ForgotPasswordAction
+ */
+export class ForgotPasswordAction {
+  static readonly type = '[Auth] Forgot Password';
+  constructor(public payload: string) {}
 }

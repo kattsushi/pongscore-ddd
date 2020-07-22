@@ -5,12 +5,13 @@ import {
   LoginAction,
   RegisterAction,
   ResetPasswordAction,
+  ForgotPasswordAction,
 } from './auth.actions';
 import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { AuthService } from '../../infrastructure/auth.service';
 import { Navigate } from '@ngxs/router-plugin';
-import { LoginUserResponse } from '@pongscore/api-interfaces';
+import { LoginUserResponse, IResponse } from '@pongscore/api-interfaces';
 import { ToastController } from '@ionic/angular';
 import { of } from 'rxjs';
 /**
@@ -51,6 +52,17 @@ export class AuthState {
     private authService: AuthService,
     public toastController: ToastController
   ) {}
+
+  private async handleError(error: { error: IResponse<any> }) {
+    console.log('ERROR', error);
+    const toast = await this.toastController.create({
+      message: error.error.data.message,
+      duration: 4000,
+      color: 'warning',
+    });
+    return toast.present();
+  }
+
   /**
    * Actions auth state
    * @param ctx
@@ -76,14 +88,7 @@ export class AuthState {
         toast.present();
         dispatch(new Navigate(['/dashboard']));
       }),
-      catchError(async (err) => {
-        const toast = await this.toastController.create({
-          message: err.error.data.message,
-          duration: 4000,
-          color: 'danger',
-        });
-        return toast.present();
-      })
+      catchError(this.handleError.bind(this))
     );
   }
 
@@ -96,16 +101,38 @@ export class AuthState {
   @Action(RegisterAction)
   register(_: StateContext<AuthStateModel>, action: RegisterAction) {
     return this.authService.register(action.payload).pipe(
-      tap(async ({ success }) => {
-        if (success) {
-          const toast = await this.toastController.create({
-            message: 'User have been created.',
-            duration: 2000,
-            color: 'primary',
-          });
-          toast.present();
-        }
-      })
+      tap(async ({ message }) => {
+        const toast = await this.toastController.create({
+          message: message,
+          duration: 2000,
+          color: 'primary',
+        });
+        toast.present();
+      }),
+      catchError(this.handleError.bind(this))
+    );
+  }
+  /**
+   * Actions auth state
+   * @param _
+   * @param action
+   * @returns
+   */
+  @Action(ForgotPasswordAction)
+  forgotPassword(
+    _: StateContext<AuthStateModel>,
+    action: ForgotPasswordAction
+  ) {
+    return this.authService.forgotPassword(action.payload).pipe(
+      tap(async ({ message }) => {
+        const toast = await this.toastController.create({
+          message: message,
+          duration: 2000,
+          color: 'primary',
+        });
+        toast.present();
+      }),
+      catchError(this.handleError.bind(this))
     );
   }
   /**
@@ -132,25 +159,16 @@ export class AuthState {
     action: ResetPasswordAction
   ) {
     return this.authService.resetPassword(action.payload).pipe(
-      tap(async ({ data }) => {
-        let toastMessage;
-        if (data) {
-          toastMessage = {
-            message: 'User have been created.',
-            duration: 2000,
-            color: 'primary',
-          };
-        } else {
-          toastMessage = {
-            message: 'Something was wrong',
-            duration: 2000,
-            color: 'danger',
-          };
-        }
-        const toast = await this.toastController.create(toastMessage);
+      tap(async ({ message }) => {
+        const toast = await this.toastController.create({
+          message: message,
+          duration: 2000,
+          color: 'primary',
+        });
         toast.present();
         dispatch(new Navigate(['/auth/login']));
-      })
+      }),
+      catchError(this.handleError.bind(this))
     );
   }
 }

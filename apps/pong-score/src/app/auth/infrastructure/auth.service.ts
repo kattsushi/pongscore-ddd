@@ -59,4 +59,14 @@ export class AuthService {
       newPasswordToken,
     });
   }
+  /**
+   * Forgots password
+   * @param payload
+   * @returns password
+   */
+  forgotPassword(payload: string): Observable<IResponse<null>> {
+    return this.http.get<IResponse<null>>(
+      `auth/email/forgot-password/${payload}`
+    );
+  }
 }

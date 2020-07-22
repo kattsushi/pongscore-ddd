@@ -52,11 +52,9 @@ export class AuthController {
   @Post('email/login')
   @ApiOperation({ summary: 'Do Login' })
   @HttpCode(HttpStatus.OK)
-  async login(
-    @Body() loginUserDto: LoginUserDto
-  ): Promise<IResponse<LoginUserResponse>> {
+  async login(@Body() loginUserDto: LoginUserDto): Promise<IResponse<any>> {
     try {
-      const res = await this.authService.validateUserByPassword(loginUserDto);
+      const res = await this.authService.validateLogin(loginUserDto);
       return new ResponseSuccess('LOGIN.SUCCESS', res);
     } catch (error) {
       throw new HttpException(
@@ -78,7 +76,7 @@ export class AuthController {
   ): Promise<IResponse<any>> {
     try {
       const newUser = new UserDto(
-        await this.userService.addUser(createUserDto)
+        await this.userService.createNewUser(createUserDto)
       );
       await this.authService.createEmailToken(newUser.email);
       await this.authService.saveUserConsent(newUser.email);
@@ -163,8 +161,15 @@ export class AuthController {
   ): Promise<IResponse<boolean>> {
     try {
       let isNewPasswordChanged = false;
+
       if (resetPassword.email && resetPassword.currentPassword) {
         const isValidPassword = await this.authService.checkPassword(
+          resetPassword.email,
+          resetPassword.currentPassword
+        );
+        console.log(
+          'isValidPassword',
+          isValidPassword,
           resetPassword.email,
           resetPassword.currentPassword
         );
@@ -180,6 +185,12 @@ export class AuthController {
           );
         }
       } else if (resetPassword.newPasswordToken) {
+        console.log(
+          'I isValidPassword',
+          resetPassword.newPasswordToken,
+          resetPassword.email,
+          resetPassword.currentPassword
+        );
         const forgottenPasswordModel = await this.authService.getForgottenPasswordModel(
           resetPassword.newPasswordToken
         );

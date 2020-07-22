@@ -3,7 +3,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { jwtConstants } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { CoreModule } from '../core/core.module';
@@ -12,6 +11,8 @@ import { ForgottenPasswordSchema } from './schemas/forgotten.schema';
 import { LoggerMiddleware } from '../core/middlewares/logger.middleware';
 import { EmailVerificationSchema } from './schemas/email-verification.schema';
 import { ConsentRegistrySchema } from './schemas/consent-registry.schema';
+import { JWTService } from './jwt.service';
+import { environment } from '../../environments/environment';
 
 /**
  * Auth Module
@@ -31,12 +32,12 @@ import { ConsentRegistrySchema } from './schemas/consent-registry.schema';
     ]),
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      secret: environment.jwt.secretOrKey,
+      signOptions: { expiresIn: environment.jwt.expiresIn },
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, JWTService],
   exports: [AuthService],
 })
 export class AuthModule {

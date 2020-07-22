@@ -21,6 +21,8 @@ import {
 import { environment } from './../../environments/environment';
 import { UserService } from '../user/user.service';
 import { MailerService, MailOptions } from '../core/mailer/mailer.service';
+import { JWTService } from './jwt.service';
+import { getTemplateVerifyEmail } from './templates/verification.template';
 
 /**
  * Auth Service
@@ -38,8 +40,9 @@ export class AuthService {
   constructor(
     private httpService: HttpService,
     private usersService: UserService,
-    private jwtService: JwtService,
+    private jwtService: JWTService,
     private mailer: MailerService,
+    private jwt: JWTService,
     @InjectModel('EmailVerification')
     private readonly emailVerificationModel: Model<EmailVerification>,
     @InjectModel('ConsentRegistry')
@@ -48,54 +51,77 @@ export class AuthService {
     private readonly forgottenPasswordModel: Model<ForgottenPassword>
   ) {}
 
-  async validateUserByPassword(
-    loginAttempt: LoginUserDto
-  ): Promise<LoginUserResponse> {
-    // This will be used for the initial login
-    const userToAttempt: any = await this.usersService.findOneByEmail(
-      loginAttempt.email
-    );
-    if (!userToAttempt)
-      throw new UnauthorizedException('LOGIN.ERROR.EMAIL_NOT_FOUND');
-    // Check the supplied password against the hash stored for this email address
-    const isMatch = await userToAttempt.checkPassword(loginAttempt.password);
-    if (isMatch) {
-      // If there is a successful match, generate a JWT for the user
-      return this.createJwtPayload(userToAttempt);
-    } else {
-      throw new HttpException('LOGIN.PASSWORD_INCORRECT', 401);
-    }
-  }
-  /**
-   * Validates user by jwt
-   * @param payload
-   * @returns
-   */
-  async validateUserByJwt(payload: JwtPayload) {
-    // This will be used when the user has already logged in and has a JWT
-    const user = await this.usersService.findOneByEmail(payload.email);
-    if (user) {
-      return this.createJwtPayload(user);
-    } else {
-      throw new UnauthorizedException();
-    }
-  }
-  /**
-   * Creates jwt payload
-   * @param user
-   * @returns
-   */
-  createJwtPayload(user: User): LoginUserResponse {
-    const data: JwtPayload = {
-      email: user.email,
-    };
+  async validateLogin({
+    email,
+    password,
+  }: LoginUserDto): Promise<{ token: string }> {
+    const userFromDb = await this.usersService.findOneByEmail(email);
+    if (!userFromDb)
+      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    if (!userFromDb.auth.email.valid)
+      throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
 
-    const jwt = this.jwtService.sign(data);
-    return {
-      expiresIn: 3600,
-      token: jwt,
-    };
+    const isValidPass = await compare(password, userFromDb.password);
+    console.log('isValidPass', isValidPass, password, userFromDb.password);
+    if (isValidPass) {
+      const accessToken = await this.jwtService.createToken(
+        email,
+        userFromDb.roles
+      );
+      return { token: accessToken.access_token };
+    } else {
+      throw new HttpException('LOGIN.ERROR', HttpStatus.UNAUTHORIZED);
+    }
   }
+
+  // async validateUserByPassword(
+  //   loginAttempt: LoginUserDto
+  // ): Promise<LoginUserResponse> {
+  //   // This will be used for the initial login
+  //   const userToAttempt: any = await this.usersService.findOneByEmail(
+  //     loginAttempt.email
+  //   );
+  //   if (!userToAttempt)
+  //     throw new UnauthorizedException('LOGIN.ERROR.EMAIL_NOT_FOUND');
+  //   // Check the supplied password against the hash stored for this email address
+  //   const isMatch = await userToAttempt.checkPassword(loginAttempt.password);
+  //   if (isMatch) {
+  //     // If there is a successful match, generate a JWT for the user
+  //     return this.createJwtPayload(userToAttempt);
+  //   } else {
+  //     throw new HttpException('LOGIN.PASSWORD_INCORRECT', 401);
+  //   }
+  // }
+  // /**
+  //  * Validates user by jwt
+  //  * @param payload
+  //  * @returns
+  //  */
+  // async validateUserByJwt(payload: JwtPayload) {
+  //   // This will be used when the user has already logged in and has a JWT
+  //   const user = await this.usersService.findOneByEmail(payload.email);
+  //   if (user) {
+  //     return this.createJwtPayload(user);
+  //   } else {
+  //     throw new UnauthorizedException();
+  //   }
+  // }
+  // /**
+  //  * Creates jwt payload
+  //  * @param user
+  //  * @returns
+  //  */
+  // createJwtPayload(user: User): LoginUserResponse {
+  //   const data: JwtPayload = {
+  //     email: user.email,
+  //   };
+
+  //   const jwt = this.jwtService.sign(data);
+  //   return {
+  //     expiresIn: 3600,
+  //     token: jwt,
+  //   };
+  // }
   /**
    * Creates forgotten password token
    * @param email
@@ -158,7 +184,7 @@ export class AuthService {
         text: 'Forgot Password',
         html: `
           Hi! <br><br> If you requested to reset your password<br><br>
-          <a href=${environment.host.url}:${environment.host.port}/auth/email/reset-password/${tokenModel.newPasswordToken}>
+          <a href=${environment.host.url}:${environment.host.port}/auth/reset-password/${email}/${tokenModel.newPasswordToken}>
             Click here
           </a>
         `, // html body
@@ -276,12 +302,18 @@ export class AuthService {
         to: email, // list of receivers (separated by ,)
         subject: 'Verify Email',
         text: 'Verify Email',
-        html: `
-            Hi! <br><br> Thanks for your registration<br><br>
-            <a href="${environment.host.url}:${environment.host.port}/auth/email/verify/${model.emailToken}">
-              Click here to activate your account
-            </a>
-          `, // html body
+        html: getTemplateVerifyEmail({
+          email: email,
+          url: environment.host.url,
+          port: environment.host.port,
+          emailToken: model.emailToken,
+        }),
+        // `
+        //   Hi! <br><br> Thanks for your registration<br><br>
+        //   <a href="${environment.host.url}:${environment.host.port}/auth/email/verify/${model.emailToken}">
+        //     Click here to activate your account
+        //   </a>
+        // `, // html body
       };
 
       const sent = await this.mailer.mail(mailOptions);

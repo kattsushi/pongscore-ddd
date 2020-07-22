@@ -1,9 +1,8 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { jwtConstants } from '../constants';
-import { AuthService } from '../auth.service';
-import { JwtPayload } from '@pongscore/api-interfaces';
+import { JWTService } from '../jwt.service';
+import { environment } from '../../../environments/environment';
 /**
  * Jwt Strategy
  *
@@ -16,13 +15,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   /**
    * Creates an instance of jwt strategy.
    */
-  constructor(
-    private readonly authService: AuthService
-  ) {
+  constructor(private readonly jwtService: JWTService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.secret,
+      secretOrKey: environment.jwt.secretOrKey,
     });
   }
 
@@ -31,11 +28,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload
    * @returns
    */
-  async validate(payload: JwtPayload): Promise<any> {
-    const user = await this.authService.validateUserByJwt(payload);
+  public async validate(payload: any, req: any, done: Function) {
+    const user = await this.jwtService.validateUser(req);
     if (!user) {
-      throw new UnauthorizedException();
+      return done(new UnauthorizedException(), false);
     }
-    return user;
+    done(null, user);
   }
 }

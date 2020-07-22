@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Validators as CustomValidators } from '../../application/validators';
 import { ActivatedRoute } from '@angular/router';
 import { ResetPasswordAction } from '../../application/store/auth.actions';
+import { ResetPasswordDto } from '@pongscore/api-interfaces';
 
 /**
  * Login Component
@@ -103,24 +104,25 @@ export class ResetPasswordComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.resetPasswordForm = this.formBuilder.group({
-        passwordToken: [params.passwordToken],
+        email: [params.email, Validators.required],
+        newPasswordToken: [params.passwordToken, Validators.required],
         currentPassword: [
           '',
-          Validators.compose([
-            // 1. Password Field is Required
-            Validators.required,
-            // 2. check whether the entered password has a number
-            CustomValidators.patternValidator(/\d/, { hasNumber: true }),
-            // 3. check whether the entered password has upper case letter
-            CustomValidators.patternValidator(/[A-Z]/, {
-              hasCapitalCase: true,
-            }),
-            // 4. check whether the entered password has a lower-case letter
-            CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
+          // Validators.compose([
+          //   // 1. Password Field is Required
+          //   Validators.required,
+          //   // 2. check whether the entered password has a number
+          //   CustomValidators.patternValidator(/\d/, { hasNumber: true }),
+          //   // 3. check whether the entered password has upper case letter
+          //   CustomValidators.patternValidator(/[A-Z]/, {
+          //     hasCapitalCase: true,
+          //   }),
+          //   // 4. check whether the entered password has a lower-case letter
+          //   CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
 
-            // 6. Has a minimum length of 8 characters
-            Validators.minLength(8),
-          ]),
+          //   // 6. Has a minimum length of 8 characters
+          //   Validators.minLength(8),
+          // ]),
         ],
         newPassword: [
           '',

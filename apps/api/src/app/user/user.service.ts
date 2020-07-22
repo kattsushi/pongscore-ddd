@@ -3,7 +3,8 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { hash } from 'bcrypt';
 import { CreateUserDto, User } from '@pongscore/api-interfaces';
-const saltRounds = 10;
+import { saltRounds } from '../auth/constants';
+
 /**
  * User Service
  *
@@ -98,10 +99,40 @@ export class UserService {
     const userFromDb = await this.userModel.findOne({ email: email });
     if (!userFromDb)
       throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-
     userFromDb.password = await hash(newPassword, saltRounds);
 
     await userFromDb.save();
     return true;
+  }
+
+  isValidEmail(email: string) {
+    if (email) {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    } else return false;
+  }
+
+  async createNewUser(newUser: CreateUserDto): Promise<User> {
+    if (this.isValidEmail(newUser.email) && newUser.password) {
+      const userRegistered = await this.findOneByEmail(newUser.email);
+      if (!userRegistered) {
+        newUser.password = await hash(newUser.password, saltRounds);
+        const createdUser = new this.userModel(newUser);
+        createdUser.roles = ['User'];
+        return await createdUser.save();
+      } else if (!userRegistered.auth.email.valid) {
+        return userRegistered;
+      } else {
+        throw new HttpException(
+          'REGISTRATION.USER_ALREADY_REGISTERED',
+          HttpStatus.FORBIDDEN
+        );
+      }
+    } else {
+      throw new HttpException(
+        'REGISTRATION.MISSING_MANDATORY_PARAMETERS',
+        HttpStatus.FORBIDDEN
+      );
+    }
   }
 }

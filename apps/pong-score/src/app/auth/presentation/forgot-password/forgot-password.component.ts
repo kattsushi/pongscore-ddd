@@ -1,5 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { Store } from '@ngxs/store';
+import { ForgotPasswordAction } from '../../application/store/auth.actions';
+/**
+ * Component
+ */
 @Component({
   selector: 'pongscore-forgot-password',
   template: `
@@ -12,32 +17,56 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
       <ion-row>
         <ion-col></ion-col>
         <ion-col size="8">
-          <form #form="ngForm" (ngSubmit)="sendRequest(form)" method="post">
+          <form>
             <ion-item>
               <ion-label position="floating">Email</ion-label>
-              <ion-input ngModel type="email" name="email"></ion-input>
+              <ion-input
+                [formControl]="emailForm"
+                ngModel
+                type="email"
+                name="email"
+              ></ion-input>
             </ion-item>
-            <ion-button type="submit" expand="full" color="primary">Send Request Password</ion-button>
+            <ion-button
+              (click)="sendRequest()"
+              type="submit"
+              expand="full"
+              color="primary"
+              >Send Request Password</ion-button
+            >
           </form>
         </ion-col>
         <ion-col></ion-col>
       </ion-row>
     </ion-grid>
   `,
-  styles: [`
-    :host {
-      width: 100%;
-    }
-  `]
+  styles: [
+    `
+      :host {
+        width: 100%;
+      }
+    `,
+  ],
 })
 export class ForgotPasswordComponent implements OnInit {
   @Output() goToLogin: EventEmitter<string> = new EventEmitter();
-  constructor() { }
-
+  emailForm!: FormControl;
+  constructor(private formBuilder: FormBuilder, private store: Store) {}
+  /**
+   * on init
+   */
   ngOnInit(): void {
+    this.emailForm = this.formBuilder.control(
+      null,
+      Validators.compose([Validators.required, Validators.email])
+    );
   }
-
-  sendRequest(ev: any) {
-
+  /**
+   * Sends request
+   */
+  sendRequest() {
+    if (this.emailForm.valid) {
+      this.store.dispatch(new ForgotPasswordAction(this.emailForm.value));
+    }
   }
 }
