@@ -42,7 +42,6 @@ export class AuthService {
     private usersService: UserService,
     private jwtService: JWTService,
     private mailer: MailerService,
-    private jwt: JWTService,
     @InjectModel('EmailVerification')
     private readonly emailVerificationModel: Model<EmailVerification>,
     @InjectModel('ConsentRegistry')
@@ -73,55 +72,6 @@ export class AuthService {
       throw new HttpException('LOGIN.ERROR', HttpStatus.UNAUTHORIZED);
     }
   }
-
-  // async validateUserByPassword(
-  //   loginAttempt: LoginUserDto
-  // ): Promise<LoginUserResponse> {
-  //   // This will be used for the initial login
-  //   const userToAttempt: any = await this.usersService.findOneByEmail(
-  //     loginAttempt.email
-  //   );
-  //   if (!userToAttempt)
-  //     throw new UnauthorizedException('LOGIN.ERROR.EMAIL_NOT_FOUND');
-  //   // Check the supplied password against the hash stored for this email address
-  //   const isMatch = await userToAttempt.checkPassword(loginAttempt.password);
-  //   if (isMatch) {
-  //     // If there is a successful match, generate a JWT for the user
-  //     return this.createJwtPayload(userToAttempt);
-  //   } else {
-  //     throw new HttpException('LOGIN.PASSWORD_INCORRECT', 401);
-  //   }
-  // }
-  // /**
-  //  * Validates user by jwt
-  //  * @param payload
-  //  * @returns
-  //  */
-  // async validateUserByJwt(payload: JwtPayload) {
-  //   // This will be used when the user has already logged in and has a JWT
-  //   const user = await this.usersService.findOneByEmail(payload.email);
-  //   if (user) {
-  //     return this.createJwtPayload(user);
-  //   } else {
-  //     throw new UnauthorizedException();
-  //   }
-  // }
-  // /**
-  //  * Creates jwt payload
-  //  * @param user
-  //  * @returns
-  //  */
-  // createJwtPayload(user: User): LoginUserResponse {
-  //   const data: JwtPayload = {
-  //     email: user.email,
-  //   };
-
-  //   const jwt = this.jwtService.sign(data);
-  //   return {
-  //     expiresIn: 3600,
-  //     token: jwt,
-  //   };
-  // }
   /**
    * Creates forgotten password token
    * @param email
