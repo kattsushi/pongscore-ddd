@@ -38,7 +38,6 @@ import { RegisterAction } from '../../application/store/auth.actions';
             <ion-item>
               <ion-label position="floating">First Name</ion-label>
               <ion-input
-                ngModel
                 name="first_name"
                 formControlName="first_name"
               ></ion-input>
@@ -47,7 +46,6 @@ import { RegisterAction } from '../../application/store/auth.actions';
             <ion-item>
               <ion-label position="floating">Last Name</ion-label>
               <ion-input
-                ngModel
                 name="last_name"
                 formControlName="last_name"
               ></ion-input>
@@ -57,7 +55,6 @@ import { RegisterAction } from '../../application/store/auth.actions';
               <ion-label position="floating">Email</ion-label>
               <ion-input
                 type="email"
-                ngModel
                 name="email"
                 formControlName="email"
               ></ion-input>
@@ -67,7 +64,6 @@ import { RegisterAction } from '../../application/store/auth.actions';
               <ion-label position="floating">Password</ion-label>
               <ion-input
                 type="password"
-                ngModel
                 name="password"
                 formControlName="password"
               ></ion-input>
@@ -76,7 +72,6 @@ import { RegisterAction } from '../../application/store/auth.actions';
               <ion-label position="floating">Confirm Password</ion-label>
               <ion-input
                 type="password"
-                ngModel
                 name="confirm_password"
                 formControlName="confirm_password"
               ></ion-input>

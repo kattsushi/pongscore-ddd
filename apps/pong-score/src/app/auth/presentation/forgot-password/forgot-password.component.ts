@@ -22,7 +22,6 @@ import { ForgotPasswordAction } from '../../application/store/auth.actions';
               <ion-label position="floating">Email</ion-label>
               <ion-input
                 [formControl]="emailForm"
-                ngModel
                 type="email"
                 name="email"
               ></ion-input>

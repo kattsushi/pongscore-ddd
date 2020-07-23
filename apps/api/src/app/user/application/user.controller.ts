@@ -12,7 +12,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { UserService } from './user.service';
+import { UserService } from './../infrastructure/user.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   CreateUserDto,
@@ -20,7 +20,7 @@ import {
   ResponseSuccess,
   ResponseError
 } from '@pongscore/api-interfaces';
-import { User } from './user.schema';
+import { User } from './../domain/user.schema';
 
 /**
  * User Controller
@@ -52,7 +52,7 @@ export class UserController {
     @Body() createUserDTO: CreateUserDto
   ): Promise<IResponse<User>> {
     try {
-      const user = await this.userService.addUser(createUserDTO);
+      const user = await this.userService.createNewUser(createUserDTO);
       return new ResponseSuccess('USER.CREATED', user);
     } catch (error) {
       return new ResponseError('USER.ERROR', error);

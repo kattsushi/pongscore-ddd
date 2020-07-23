@@ -35,7 +35,6 @@ import { ResetPasswordDto } from '@pongscore/api-interfaces';
               <ion-item>
                 <ion-label position="floating">Current Password</ion-label>
                 <ion-input
-                  ngModel
                   type="password"
                   name="currentPassword"
                   formControlName="currentPassword"
@@ -44,7 +43,6 @@ import { ResetPasswordDto } from '@pongscore/api-interfaces';
               <ion-item>
                 <ion-label position="floating">Password</ion-label>
                 <ion-input
-                  ngModel
                   type="password"
                   name="password"
                   formControlName="newPassword"

@@ -12,12 +12,12 @@ import {
   ForgottenPassword,
   EmailVerification,
 } from '@pongscore/api-interfaces';
-import { environment } from './../../environments/environment';
-import { UserService } from '../user/user.service';
-import { MailerService, MailOptions } from '../core/mailer/mailer.service';
+import { environment } from './../../../environments/environment';
+import { UserService } from '../../user/infrastructure/user.service';
+import { MailerService, MailOptions } from '../../core/mailer/mailer.service';
 import { JWTService } from './jwt.service';
-import { getTemplateVerifyEmail } from './templates/verification.template';
-import { ConsentRegistry } from './schemas/consent-registry.schema';
+import { getTemplateVerifyEmail } from './../templates/verification.template';
+import { ConsentRegistry } from '../domain/schemas/consent-registry.schema';
 
 /**
  * Auth Service

@@ -31,7 +31,6 @@ import { Validators as CustomValidators } from '../../application/validators';
             <ion-item>
               <ion-label position="floating">Email</ion-label>
               <ion-input
-                ngModel
                 type="email"
                 name="email"
                 formControlName="email"
@@ -41,7 +40,6 @@ import { Validators as CustomValidators } from '../../application/validators';
             <ion-item>
               <ion-label position="floating">Password</ion-label>
               <ion-input
-                ngModel
                 type="password"
                 name="password"
                 formControlName="password"

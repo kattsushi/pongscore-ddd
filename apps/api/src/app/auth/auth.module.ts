@@ -1,17 +1,17 @@
 import { Module, MiddlewareConsumer, HttpModule } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from './auth.service';
+import { AuthService } from './infrastructure/auth.service';
 import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { AuthController } from './auth.controller';
+import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
+import { AuthController } from './application/auth.controller';
 import { CoreModule } from '../core/core.module';
 import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { LoggerMiddleware } from '../core/middlewares/logger.middleware';
-import { ForgottenPasswordSchema, ForgottenPassword } from './schemas/forgotten.schema';
-import { EmailVerification, EmailVerificationSchema } from './schemas/email-verification.schema';
-import { ConsentRegistrySchema, ConsentRegistry } from './schemas/consent-registry.schema';
-import { JWTService } from './jwt.service';
+import { ForgottenPasswordSchema, ForgottenPassword } from './domain/schemas/forgotten.schema';
+import { EmailVerification, EmailVerificationSchema } from './domain/schemas/email-verification.schema';
+import { ConsentRegistrySchema, ConsentRegistry } from './domain/schemas/consent-registry.schema';
+import { JWTService } from './infrastructure/jwt.service';
 import { environment } from '../../environments/environment';
 
 /**

@@ -3,8 +3,8 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { hash } from 'bcrypt';
 import { CreateUserDto } from '@pongscore/api-interfaces';
-import { saltRounds } from '../auth/constants';
-import { User } from './user.schema';
+import { saltRounds } from '../../auth/infrastructure/constants';
+import { User } from './../domain/user.schema';
 
 /**
  * User Service

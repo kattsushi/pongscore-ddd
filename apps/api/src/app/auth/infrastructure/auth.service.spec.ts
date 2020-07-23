@@ -1,21 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { HttpService, HttpModule } from '@nestjs/common';
-import { UserService } from '../user/user.service';
+import { UserService } from '../../user/infrastructure/user.service';
 import { JWTService } from './jwt.service';
-import { MailerService } from '../core/mailer/mailer.service';
+import { MailerService } from '../../core/mailer/mailer.service';
 import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { environment } from '../../environments/environment';
-import { CoreModule } from './../core/core.module';
-import { UserModule } from './../user/user.module';
+import { environment } from '../../../environments/environment';
+import { CoreModule } from './../../core/core.module';
+import { UserModule } from './../../user/user.module';
 
-import { ForgottenPasswordSchema, ForgottenPassword } from './schemas/forgotten.schema';
-import { EmailVerificationSchema, EmailVerification } from './schemas/email-verification.schema';
-import { ConsentRegistrySchema, ConsentRegistry } from './schemas/consent-registry.schema';
+import { ForgottenPasswordSchema, ForgottenPassword } from './../domain/schemas/forgotten.schema';
+import { EmailVerificationSchema, EmailVerification } from './../domain/schemas/email-verification.schema';
+import { ConsentRegistrySchema, ConsentRegistry } from './../domain/schemas/consent-registry.schema';
 import { of } from 'rxjs';
-import { User } from '../user/user.schema';
+import { User } from '../../user/domain/user.schema';
 
 describe('AuthService', () => {
   let service: AuthService;

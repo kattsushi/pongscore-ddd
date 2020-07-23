@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './../infrastructure/auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 import { Request } from 'express';
@@ -26,7 +26,7 @@ import {
   CreateUserDto,
   UserDto,
 } from '@pongscore/api-interfaces';
-import { UserService } from '../user/user.service';
+import { UserService } from '../../user/infrastructure/user.service';
 
 /**
  * Auth Controller
