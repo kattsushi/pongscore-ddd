@@ -53,10 +53,10 @@ export class AuthState {
     public toastController: ToastController
   ) {}
 
-  private async handleError(error: { error: IResponse<any> }) {
-    console.log('ERROR', error);
+  private async handleError(error: { error: any }) {
+    console.log('ERROR', error.error.errorMessage);
     const toast = await this.toastController.create({
-      message: error.error.data.message,
+      message: error.error.data.message ? error.error.data.message : error.error.errorMessage,
       duration: 4000,
       color: 'warning',
     });

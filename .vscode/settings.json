@@ -1,5 +1,6 @@
 {
   "vsicons.presets.nestjs": true,
   "autoHide.autoHidePanel": false,
-  "autoHide.autoHideSideBar": false
+  "autoHide.autoHideSideBar": false,
+  "jestrunner.configPath": "jest.config.js"
 }

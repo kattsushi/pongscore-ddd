@@ -1,8 +1,8 @@
 import * as jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
 import { environment } from '../../environments/environment';
-import { User } from '@pongscore/api-interfaces';
 import { UserService } from '../user/user.service';
+import { User } from '../user/user.schema';
 
 @Injectable()
 export class JWTService {

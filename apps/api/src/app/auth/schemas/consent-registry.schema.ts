@@ -1,11 +1,30 @@
-import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-export const ConsentRegistrySchema = new mongoose.Schema({
-  email: String,
-  registrationForm: [Array],
-  checkboxText: String,
-  date: Date,
-  privacyPolicy: String,
-  cookiePolicy: String,
-  acceptedPolicy: String,
-});
+@Schema()
+export class ConsentRegistry extends Document {
+  @Prop()
+  name!: string;
+
+  @Prop({ type: String })
+  email!: string;
+
+  @Prop({ type: [Array] })
+  registrationForm!: any[];
+
+  @Prop({ type: String })
+  checkboxText!: string;
+
+  @Prop({ type: Date })
+  date!: Date;
+
+  @Prop({ type: String })
+  privacyPolicy!: string;
+
+  @Prop({ type: String })
+  cookiePolicy!: string;
+
+  @Prop({ type: String })
+  acceptedPolicy!: string;
+}
+export const ConsentRegistrySchema = SchemaFactory.createForClass(ConsentRegistry);

@@ -2,8 +2,9 @@ import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { hash } from 'bcrypt';
-import { CreateUserDto, User } from '@pongscore/api-interfaces';
+import { CreateUserDto } from '@pongscore/api-interfaces';
 import { saltRounds } from '../auth/constants';
+import { User } from './user.schema';
 
 /**
  * User Service
@@ -17,7 +18,7 @@ export class UserService {
    * Creates an instance of user service.
    * @param userModel
    */
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
   /**
    * Finds one

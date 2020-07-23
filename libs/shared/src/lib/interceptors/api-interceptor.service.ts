@@ -10,7 +10,7 @@ export class ApiInterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('auth.token');
     const apiReq = req.clone({
-      url: `${this.environment.host}/${req.url}`,
+      url: `${this.environment.host ? this.environment.host: 'http://localhost:3333' }/${req.url}`,
       setHeaders: {
         Authorization: `Bearer ${token}`
       }

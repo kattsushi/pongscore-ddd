@@ -1,28 +1,23 @@
 import { Model } from 'mongoose';
 import {
   Injectable,
-  UnauthorizedException,
   HttpStatus,
   HttpException,
   HttpService,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { compare } from 'bcrypt';
 import {
   LoginUserDto,
-  JwtPayload,
-  LoginUserResponse,
   ForgottenPassword,
-  User,
   EmailVerification,
-  ConsentRegistry,
 } from '@pongscore/api-interfaces';
 import { environment } from './../../environments/environment';
 import { UserService } from '../user/user.service';
 import { MailerService, MailOptions } from '../core/mailer/mailer.service';
 import { JWTService } from './jwt.service';
 import { getTemplateVerifyEmail } from './templates/verification.template';
+import { ConsentRegistry } from './schemas/consent-registry.schema';
 
 /**
  * Auth Service
@@ -44,7 +39,7 @@ export class AuthService {
     private mailer: MailerService,
     @InjectModel('EmailVerification')
     private readonly emailVerificationModel: Model<EmailVerification>,
-    @InjectModel('ConsentRegistry')
+    @InjectModel(ConsentRegistry.name)
     private readonly consentRegistryModel: Model<ConsentRegistry>,
     @InjectModel('ForgottenPassword')
     private readonly forgottenPasswordModel: Model<ForgottenPassword>
@@ -69,7 +64,7 @@ export class AuthService {
       );
       return { token: accessToken.access_token };
     } else {
-      throw new HttpException('LOGIN.ERROR', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('LOGIN.ERROR.WRONG_PASSWORD', HttpStatus.UNAUTHORIZED);
     }
   }
   /**
@@ -293,7 +288,10 @@ export class AuthService {
         console.log('tokentokentoken', userFromDb);
         userFromDb.auth.email.valid = true;
         const savedUser = await userFromDb.save();
+        console.log('emailVerif', emailVerif);
+        console.log('savedUser', savedUser);
         await emailVerif.remove();
+
         return !!savedUser;
       } else {
         return false;

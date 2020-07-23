@@ -18,9 +18,9 @@ import {
   CreateUserDto,
   IResponse,
   ResponseSuccess,
-  ResponseError,
-  User,
+  ResponseError
 } from '@pongscore/api-interfaces';
+import { User } from './user.schema';
 
 /**
  * User Controller

@@ -6,11 +6,11 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { CoreModule } from '../core/core.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ForgottenPasswordSchema } from './schemas/forgotten.schema';
+import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { LoggerMiddleware } from '../core/middlewares/logger.middleware';
-import { EmailVerificationSchema } from './schemas/email-verification.schema';
-import { ConsentRegistrySchema } from './schemas/consent-registry.schema';
+import { ForgottenPasswordSchema, ForgottenPassword } from './schemas/forgotten.schema';
+import { EmailVerification, EmailVerificationSchema } from './schemas/email-verification.schema';
+import { ConsentRegistrySchema, ConsentRegistry } from './schemas/consent-registry.schema';
 import { JWTService } from './jwt.service';
 import { environment } from '../../environments/environment';
 
@@ -26,9 +26,9 @@ import { environment } from '../../environments/environment';
     CoreModule,
     UserModule,
     MongooseModule.forFeature([
-      { name: 'EmailVerification', schema: EmailVerificationSchema },
-      { name: 'ForgottenPassword', schema: ForgottenPasswordSchema },
-      { name: 'ConsentRegistry', schema: ConsentRegistrySchema },
+      { name: EmailVerification.name, schema: EmailVerificationSchema },
+      { name: ForgottenPassword.name, schema: ForgottenPasswordSchema },
+      { name: ConsentRegistry.name, schema: ConsentRegistrySchema },
     ]),
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
     JwtModule.register({
@@ -37,7 +37,11 @@ import { environment } from '../../environments/environment';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JWTService],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    JWTService,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {
