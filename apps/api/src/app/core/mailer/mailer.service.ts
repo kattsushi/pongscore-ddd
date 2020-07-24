@@ -1,33 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { Nodemailer } from '@crowdlinker/nestjs-mailer';
-import { NodemailerDrivers } from '@crowdlinker/nestjs-mailer';
+import { MailerService, ISendMailOptions } from '@nestjs-modules/mailer';
 
-export interface MailOptions {
-  from: string;
-  to: string; // list of receivers (separated by ,)
-  subject: string;
-  text: string;
-  html: string; // html body
-}
 /**
  *
  * @export
  * @class MailerService
  */
 @Injectable()
-export class MailerService {
+export class CoreMailerService {
   /**
    * Creates an instance of mailer service.
    * @param nodemailer
    */
-  constructor(
-    private readonly nodemailer: Nodemailer<NodemailerDrivers.SMTP>
-  ) {}
+  constructor(private readonly mailerService: MailerService) {}
   /**
    * Mails mailer service
    * @param mailOptions
    */
-  async mail(mailOptions: MailOptions) {
-    return this.nodemailer.sendMail(mailOptions);
+  async mail(mailOptions: ISendMailOptions) {
+    return this.mailerService.sendMail(mailOptions);
   }
 }

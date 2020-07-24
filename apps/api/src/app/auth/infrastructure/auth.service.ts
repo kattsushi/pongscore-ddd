@@ -12,11 +12,11 @@ import {
   ForgottenPassword,
   EmailVerification,
 } from '@pongscore/api-interfaces';
+import { ISendMailOptions } from '@nestjs-modules/mailer';
 import { environment } from './../../../environments/environment';
 import { UserService } from '../../user/infrastructure/user.service';
-import { MailerService, MailOptions } from '../../core/mailer/mailer.service';
+import { CoreMailerService } from '../../core/mailer/mailer.service';
 import { JWTService } from './jwt.service';
-import { getTemplateVerifyEmail } from './../templates/verification.template';
 import { ConsentRegistry } from '../domain/schemas/consent-registry.schema';
 
 /**
@@ -36,7 +36,7 @@ export class AuthService {
     private httpService: HttpService,
     private usersService: UserService,
     private jwtService: JWTService,
-    private mailer: MailerService,
+    private mailer: CoreMailerService,
     @InjectModel('EmailVerification')
     private readonly emailVerificationModel: Model<EmailVerification>,
     @InjectModel(ConsentRegistry.name)
@@ -56,7 +56,6 @@ export class AuthService {
       throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
 
     const isValidPass = await compare(password, userFromDb.password);
-    console.log('isValidPass', isValidPass, password, userFromDb.password);
     if (isValidPass) {
       const accessToken = await this.jwtService.createToken(
         email,
@@ -64,7 +63,10 @@ export class AuthService {
       );
       return { token: accessToken.access_token };
     } else {
-      throw new HttpException('LOGIN.ERROR.WRONG_PASSWORD', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'LOGIN.ERROR.WRONG_PASSWORD',
+        HttpStatus.UNAUTHORIZED
+      );
     }
   }
   /**
@@ -120,21 +122,24 @@ export class AuthService {
       throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
 
     const tokenModel = await this.createForgottenPasswordToken(email);
-
+    console.log('TOken', tokenModel);
     if (tokenModel && tokenModel.newPasswordToken) {
-      const mailOptions: MailOptions = {
+      const mailOptions: ISendMailOptions = {
         from: '"Company" <' + environment.mail.user + '>',
         to: email, // list of receivers (separated by ,)
         subject: 'Frogotten Password',
         text: 'Forgot Password',
-        html: `
-          Hi! <br><br> If you requested to reset your password<br><br>
-          <a href=${environment.host.url}:${environment.host.port}/auth/reset-password/${email}/${tokenModel.newPasswordToken}>
-            Click here
-          </a>
-        `, // html body
+        context: {
+          url: environment.host.url,
+          port: environment.host.port,
+          email: email,
+          newPasswordToken: tokenModel.newPasswordToken,
+        },
+        template: 'forgotten-password.template.html', // html body
       };
-      return this.mailer.mail(mailOptions);
+      return this.mailer
+        .mail(mailOptions)
+        .catch((error) => console.log('ERROR', error));
     } else {
       throw new HttpException(
         'REGISTER.USER_NOT_REGISTERED',
@@ -242,27 +247,21 @@ export class AuthService {
     const model = await this.emailVerificationModel.findOne({ email: email });
 
     if (model && model.emailToken) {
-      const mailOptions = {
+      const mailOptions: ISendMailOptions = {
         from: `Company<${environment.mail.user}>`,
         to: email, // list of receivers (separated by ,)
         subject: 'Verify Email',
         text: 'Verify Email',
-        html: getTemplateVerifyEmail({
+        context: {
           email: email,
           url: environment.host.url,
           port: environment.host.port,
           emailToken: model.emailToken,
-        }),
-        // `
-        //   Hi! <br><br> Thanks for your registration<br><br>
-        //   <a href="${environment.host.url}:${environment.host.port}/auth/email/verify/${model.emailToken}">
-        //     Click here to activate your account
-        //   </a>
-        // `, // html body
+        },
+        template: 'verification.template.html',
       };
 
-      const sent = await this.mailer.mail(mailOptions);
-      return sent;
+      return this.mailer.mail(mailOptions);
     } else {
       throw new HttpException(
         'REGISTER.USER_NOT_REGISTERED',

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
+import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
 import { ForgotPasswordAction } from '../../application/store/auth.actions';
 /**
  * Component
@@ -48,9 +48,13 @@ import { ForgotPasswordAction } from '../../application/store/auth.actions';
   ],
 })
 export class ForgotPasswordComponent implements OnInit {
-  @Output() goToLogin: EventEmitter<string> = new EventEmitter();
+  @Output() goToLogin: EventEmitter<void> = new EventEmitter();
   emailForm!: FormControl;
-  constructor(private formBuilder: FormBuilder, private store: Store) {}
+  constructor(
+    private actions: Actions,
+    private formBuilder: FormBuilder,
+    private store: Store
+  ) {}
   /**
    * on init
    */
@@ -59,6 +63,9 @@ export class ForgotPasswordComponent implements OnInit {
       null,
       Validators.compose([Validators.required, Validators.email])
     );
+    this.actions.pipe(ofActionSuccessful(ForgotPasswordAction)).subscribe(() => {
+      this.goToLogin.emit();
+    });
   }
   /**
    * Sends request

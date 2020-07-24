@@ -8,7 +8,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { Validators as CustomValidators } from '../../application/validators';
-import { Store } from '@ngxs/store';
+import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
 import { RegisterAction } from '../../application/store/auth.actions';
 
 /**
@@ -130,6 +130,7 @@ export class RegisterComponent implements OnInit {
    * @param modalController
    */
   constructor(
+    private actions: Actions,
     private store: Store,
     private modalController: ModalController,
     private toastConstroller: ToastController,
@@ -173,6 +174,11 @@ export class RegisterComponent implements OnInit {
         validator: CustomValidators.passwordMatchValidator,
       }
     );
+
+    this.actions.pipe(ofActionSuccessful(RegisterAction)).subscribe(() => {
+      this.registerForm.reset();
+      this.goToLogin.emit();
+    });
   }
   /**
    * Dismiss register
@@ -187,9 +193,7 @@ export class RegisterComponent implements OnInit {
   async register(form: { value: CreateUserDto }) {
     if (this.conditions.value) {
       if (this.registerForm.valid) {
-        await this.store.dispatch(new RegisterAction(form.value));
-        this.registerForm.reset();
-        this.goToLogin.emit();
+        this.store.dispatch(new RegisterAction(form.value));
       } else {
         const toast = await this.toastConstroller.create({
           color: 'warning',

@@ -128,8 +128,12 @@ export class AuthComponent implements OnInit, AfterContentInit {
   /**
    * Go to login page
    */
-  goToLoginPage() {
+  async goToLoginPage() {
     this.slides?.slideTo(0);
+    const isModalOpened = await this.modalController.getTop();
+    if (isModalOpened) {
+      this.modalController.dismiss();
+    }
   }
   /**
    * Go to register page

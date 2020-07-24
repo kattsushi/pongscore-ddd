@@ -149,7 +149,10 @@ export class AuthController {
         return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
       }
     } catch (error) {
-      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
+      throw new HttpException(
+        new ResponseError('LOGIN.ERROR.SEND_EMAIL', error),
+        HttpStatus.UNAUTHORIZED
+      );
     }
   }
 
@@ -167,12 +170,6 @@ export class AuthController {
           resetPassword.email,
           resetPassword.currentPassword
         );
-        console.log(
-          'isValidPassword',
-          isValidPassword,
-          resetPassword.email,
-          resetPassword.currentPassword
-        );
         if (isValidPassword) {
           isNewPasswordChanged = await this.userService.setPassword(
             resetPassword.email,
@@ -185,12 +182,6 @@ export class AuthController {
           );
         }
       } else if (resetPassword.newPasswordToken) {
-        console.log(
-          'I isValidPassword',
-          resetPassword.newPasswordToken,
-          resetPassword.email,
-          resetPassword.currentPassword
-        );
         const forgottenPasswordModel = await this.authService.getForgottenPasswordModel(
           resetPassword.newPasswordToken
         );

@@ -1,8 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { LoginAction } from '../../application/store/auth.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Validators as CustomValidators } from '../../application/validators';
+import { Action } from 'rxjs/internal/scheduler/Action';
 
 /**
  * Login Component
@@ -109,7 +110,11 @@ export class LoginComponent implements OnInit {
    * Creates an instance of login component.
    * @param modalController
    */
-  constructor(private store: Store, private formBuilder: FormBuilder) {}
+  constructor(
+    private actions: Actions,
+    private store: Store,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -131,11 +136,15 @@ export class LoginComponent implements OnInit {
         ]),
       ],
     });
+
+    this.actions.pipe(ofActionSuccessful(LoginAction)).subscribe(() => {
+      this.loginForm.reset();
+    });
   }
   /**
    * Logins login component
    */
-  login(): void {
+  login() {
     if (this.loginForm.valid) {
       this.store.dispatch(new LoginAction(this.loginForm.value));
     }
