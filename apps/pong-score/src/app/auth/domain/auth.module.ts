@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LayoutModule } from '@angular/cdk/layout';
-import { NgxsModule } from '@ngxs/store';
-import { IonicModule } from '@ionic/angular';
-import { UiModule } from '@pongscore/ui';
+import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { LayoutModule } from '@angular/cdk/layout';
+import { IonicModule } from '@ionic/angular';
+import { NgxsModule } from '@ngxs/store';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { UiModule } from '@pongscore/ui';
 import { SharedModule } from '@pongscore/shared';
 
 import { LoginComponent } from '../presentation/login/login.component';
@@ -26,6 +28,10 @@ const COMPONENTS = [
   ModalComponent,
   ResetPasswordComponent,
 ];
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/auth/', '.json');
+}
 
 /**
  * Auth Ng module

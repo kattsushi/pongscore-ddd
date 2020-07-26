@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
-import { LoginAction } from '../../application/store/auth.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
+
+import { LoginAction } from '../../application/store/auth.actions';
 import { Validators as CustomValidators } from '../../application/validators';
-import { Action } from 'rxjs/internal/scheduler/Action';
 
 /**
  * Login Component
@@ -30,7 +30,7 @@ import { Action } from 'rxjs/internal/scheduler/Action';
             method="post"
           >
             <ion-item>
-              <ion-label position="floating">Email</ion-label>
+              <ion-label position="floating">{{ 'AUTH.LOGIN.EMAIL' | translate }}</ion-label>
               <ion-input
                 type="email"
                 name="email"
@@ -39,7 +39,7 @@ import { Action } from 'rxjs/internal/scheduler/Action';
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating">Password</ion-label>
+              <ion-label position="floating">{{ 'AUTH.LOGIN.PASSWORD' | translate }}</ion-label>
               <ion-input
                 type="password"
                 name="password"
@@ -48,11 +48,12 @@ import { Action } from 'rxjs/internal/scheduler/Action';
             </ion-item>
 
             <p text-right (click)="goToForgotPassword.emit()">
-              Forgot Password?
+              {{ 'AUTH.LOGIN.FORGOT-PASSWORD' | translate }}
             </p>
 
-            <ion-button type="submit" expand="full" color="primary"
-              >Login</ion-button
+            <ion-button type="submit" expand="full" color="primary">
+              {{ 'AUTH.LOGIN.LOGIN' | translate }}
+            </ion-button
             >
           </form>
         </ion-col>
@@ -60,12 +61,12 @@ import { Action } from 'rxjs/internal/scheduler/Action';
       <ion-row class="ion-align-items-center">
         <ion-col size="12">
           <div class="register">
-            <p text-center>Don't have a account?</p>
+            <p text-center>{{ 'AUTH.LOGIN.DONT-HAVE-A-ACCOUNT' | translate }}</p>
             <ion-button
               expand="full"
               color="secondary"
               (click)="goToRegister.emit()"
-              >Register</ion-button
+              >{{ 'AUTH.LOGIN.REGISTER' | translate }}</ion-button
             >
           </div>
         </ion-col>

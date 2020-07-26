@@ -1,0 +1,25 @@
+{
+  "AUTH": {
+    "LOGIN": {
+      "PASSWORD": "Password",
+      "FORGOT-PASSWORD": "Forgot password?",
+      "EMAIL": "Email",
+      "LOGIN": "Login",
+      "DONT-HAVE-A-ACCOUNT": "Don't have a account?",
+      "REGISTER": "Register"
+    },
+    "REGISTER": {
+      "FIRST-NAME": "First Name",
+      "LAST-NAME": "Last Name",
+      "EMAIL": "Email",
+      "PASSWORD": "Password",
+      "CONFIRM-PASSWORD": "Confirm Password",
+      "ACCEPT-TERMS": "Accept Terms.",
+      "REGISTER": "Register"
+    }
+  },
+  "MENU": {
+    "SELECT-LENGUAJE": "Select Languaje",
+    "DARK-MODE": "Dark mode"
+  }
+}

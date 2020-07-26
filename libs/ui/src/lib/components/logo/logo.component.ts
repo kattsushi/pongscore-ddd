@@ -49,6 +49,19 @@ export class LogoComponent implements OnInit, OnDestroy {
     this.toggleDarkTheme(this.prefersDark.matches);
     // Listen for changes to the prefers-color-scheme media query
     this.prefersDark.addEventListener('change', (mediaQuery) => this.toggleDarkTheme(mediaQuery.matches));
+
+    const mutationObserver = new MutationObserver((mutationsList: any, observer: any) => {
+      mutationsList.forEach((mutation: any) => {
+        if (mutation.attributeName === 'class') {
+          this.toggleDarkTheme(mutation.target.className.includes('dark'));
+        }
+      });
+    });
+
+    mutationObserver.observe(
+      document.body,
+      { attributes: true }
+    );
   }
   /**
    * Toggles dark theme

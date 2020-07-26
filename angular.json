@@ -30,7 +30,8 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
-              }
+              },
+              "apps/pong-score/src/manifest.webmanifest"
             ],
             "styles": [
               "apps/pong-score/src/styles.scss",
@@ -60,6 +61,9 @@
               },
               {
                 "input": "node_modules/@ionic/angular/css/flex-utils.css"
+              },
+              {
+                "input": "node_modules/flag-icon-css/css/flag-icon.min.css"
               },
               {
                 "input": "apps/pong-score/src/theme/variables.css"
@@ -93,7 +97,9 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/pong-score/ngsw-config.json"
             }
           }
         },

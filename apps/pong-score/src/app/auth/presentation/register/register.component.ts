@@ -1,14 +1,15 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
-import { CreateUserDto } from '@pongscore/api-interfaces';
+import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   FormControl,
 } from '@angular/forms';
+import { CreateUserDto } from '@pongscore/api-interfaces';
+
 import { Validators as CustomValidators } from '../../application/validators';
-import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
 import { RegisterAction } from '../../application/store/auth.actions';
 
 /**
@@ -36,7 +37,7 @@ import { RegisterAction } from '../../application/store/auth.actions';
             method="post"
           >
             <ion-item>
-              <ion-label position="floating">First Name</ion-label>
+              <ion-label position="floating">{{ 'AUTH.REGISTER.FIRST-NAME' | translate }}</ion-label>
               <ion-input
                 name="first_name"
                 formControlName="first_name"
@@ -44,7 +45,7 @@ import { RegisterAction } from '../../application/store/auth.actions';
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating">Last Name</ion-label>
+              <ion-label position="floating">{{ 'AUTH.REGISTER.LAST-NAME' | translate }}</ion-label>
               <ion-input
                 name="last_name"
                 formControlName="last_name"
@@ -52,7 +53,7 @@ import { RegisterAction } from '../../application/store/auth.actions';
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating">Email</ion-label>
+              <ion-label position="floating">{{ 'AUTH.REGISTER.EMAIL' | translate }}</ion-label>
               <ion-input
                 type="email"
                 name="email"
@@ -61,7 +62,7 @@ import { RegisterAction } from '../../application/store/auth.actions';
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating">Password</ion-label>
+              <ion-label position="floating">{{ 'AUTH.REGISTER.PASSWORD' | translate }}</ion-label>
               <ion-input
                 type="password"
                 name="password"
@@ -69,7 +70,7 @@ import { RegisterAction } from '../../application/store/auth.actions';
               ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-label position="floating">Confirm Password</ion-label>
+              <ion-label position="floating">{{ 'AUTH.REGISTER.CONFIRM-PASSWORD' | translate }}</ion-label>
               <ion-input
                 type="password"
                 name="confirm_password"
@@ -77,14 +78,14 @@ import { RegisterAction } from '../../application/store/auth.actions';
               ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-label slot="end">Accept Terms</ion-label>
+              <ion-label slot="end">{{ 'AUTH.REGISTER.ACCEPT-TERMS' | translate }}</ion-label>
               <ion-checkbox
                 slot="start"
                 [formControl]="conditions"
               ></ion-checkbox>
             </ion-item>
             <ion-button type="submit" expand="full" color="secondary"
-              >Register</ion-button
+              >{{ 'AUTH.REGISTER.REGISTER' | translate }}</ion-button
             >
           </form>
         </ion-col>
@@ -92,9 +93,9 @@ import { RegisterAction } from '../../application/store/auth.actions';
       <ion-row class="ion-align-items-center">
         <ion-col size="12">
           <div class="login">
-            <p text-center>Already have a account?</p>
+            <p text-center>{{ 'AUTH.LOGIN.DONT-HAVE-A-ACCOUNT' | translate }}</p>
             <ion-button expand="full" color="primary" (click)="goToLogin.emit()"
-              >Login</ion-button
+              >{{ 'AUTH.LOGIN.LOGIN' | translate }}</ion-button
             >
           </div>
         </ion-col>

@@ -49,7 +49,6 @@ import { ModalComponent } from '../modal/modal.component';
 
     ion-grid {
       height: 100%;
-      margin-top: 56px;
     }
 
     @media (max-width: 576px) {

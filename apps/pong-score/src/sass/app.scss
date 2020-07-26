@@ -51,3 +51,13 @@ ion-avatar {
     bottom: 0;
   }
 }
+
+body.dark > pongscore-root > ion-app > .custom-pane {
+  --side-max-width: 20%;
+  --border: 1.5px solid rgba(555,555,555, 0.2);
+}
+
+body > pongscore-root > ion-app > .custom-pane {
+  --side-max-width: 20%;
+  --border: 1.5px solid rgba(0,0,0, 0.2);
+}

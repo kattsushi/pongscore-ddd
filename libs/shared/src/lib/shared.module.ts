@@ -1,16 +1,26 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ApiInterceptorService } from './interceptors/api-interceptor.service';
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
-
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      },
+      isolate: false
+    })
   ],
   exports: [
     CommonModule,
+    TranslateModule,
     HttpClientModule,
   ],
   providers: [{
@@ -30,4 +40,8 @@ export class SharedModule {
       ]
     };
   }
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }
