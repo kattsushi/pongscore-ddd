@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
+import { Translations } from '@pongscore/shared';
+
 import { ForgotPasswordAction } from '../../application/store/auth.actions';
 /**
  * Component
@@ -19,7 +21,7 @@ import { ForgotPasswordAction } from '../../application/store/auth.actions';
         <ion-col size="8">
           <form>
             <ion-item>
-              <ion-label position="floating">Email</ion-label>
+              <ion-label position="floating">{{ translations.AUTH.FORGOT_PASSWORD.EMAIL | translate }}</ion-label>
               <ion-input
                 [formControl]="emailForm"
                 type="email"
@@ -31,7 +33,7 @@ import { ForgotPasswordAction } from '../../application/store/auth.actions';
               type="submit"
               expand="full"
               color="primary"
-              >Send Request Password</ion-button
+              > {{ translations.AUTH.FORGOT_PASSWORD.SEND_REQUEST_PASSWORD | translate }}</ion-button
             >
           </form>
         </ion-col>
@@ -53,7 +55,8 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(
     private actions: Actions,
     private formBuilder: FormBuilder,
-    private store: Store
+    private store: Store,
+    public translations: Translations
   ) {}
   /**
    * on init

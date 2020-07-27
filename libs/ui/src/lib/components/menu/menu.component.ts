@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Translations } from '@pongscore/shared';
 /**
  * Component
  */
@@ -13,11 +14,11 @@ import { TranslateService } from '@ngx-translate/core';
       <ion-content>
         <ion-list>
           <ion-item>
-            <ion-label>{{ 'MENU.DARK-MODE' | translate }}</ion-label>
+            <ion-label>{{ translations.MENU.DARK_MODE | translate }}</ion-label>
             <ion-toggle [ngModel]="isDarkMode" (ionChange)="toggleDark($event)"></ion-toggle>
           </ion-item>
         <ion-item lines="full">
-          <ion-label>{{ 'MENU.SELECT-LENGUAJE' | translate }}</ion-label>
+          <ion-label>{{ translations.MENU.SELECT_LENGUAJE | translate }}</ion-label>
           <ngx-flag-picker
             [selectedCountryCode]="selectedLang"
             [countryCodes]="langCodes"
@@ -53,7 +54,8 @@ export class MenuComponent implements OnInit {
   langCodes: string[] = [];
   selectedLang = '';
   constructor(
-    public translate: TranslateService
+    public translate: TranslateService,
+    public translations: Translations
   ) { }
 
   ngOnInit(): void {

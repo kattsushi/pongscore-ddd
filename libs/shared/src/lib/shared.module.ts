@@ -1,10 +1,23 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ApiInterceptorService } from './interceptors/api-interceptor.service';
+import { from, of } from 'rxjs';
 
+import { es, en } from '@pongscore/api-interfaces';
+import { Translations } from './services/translations.service';
+
+const TRANSLATIONS: any = {
+  en: en,
+  es: es
+};
+
+export class WebpackTranslateLoader implements TranslateLoader {
+  getTranslation(lang: string) {
+    return from(of(TRANSLATIONS[lang]));
+  }
+}
 @NgModule({
   imports: [
     CommonModule,
@@ -12,8 +25,7 @@ import { ApiInterceptorService } from './interceptors/api-interceptor.service';
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
+        useClass: WebpackTranslateLoader
       },
       isolate: false
     })
@@ -21,13 +33,15 @@ import { ApiInterceptorService } from './interceptors/api-interceptor.service';
   exports: [
     CommonModule,
     TranslateModule,
-    HttpClientModule,
+    HttpClientModule
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: ApiInterceptorService,
-    multi: true,
-  }
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptorService,
+      multi: true,
+    },
+    Translations
   ]
 })
 export class SharedModule {
@@ -37,11 +51,8 @@ export class SharedModule {
       providers: [
         ApiInterceptorService,
         { provide: 'environment', useValue: environment },
+        Translations
       ]
     };
   }
-}
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
 }

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Translations } from '@pongscore/shared';
 
 @Component({
   selector: 'pongscore-modal',
   template: `
     <ion-header translucent>
       <ion-toolbar>
-        <ion-title>Forgot Password</ion-title>
+        <ion-title>{{ translations.AUTH.FORGOT_PASSWORD.FORGOT_PASSWORD | translate }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="dismissModal()">Close</ion-button>
+          <ion-button (click)="dismissModal()">{{ translations.AUTH.FORGOT_PASSWORD.CLOSE | translate }}</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -22,7 +23,8 @@ import { ModalController } from '@ionic/angular';
 export class ModalComponent implements OnInit {
 
   constructor(
-    private modalController: ModalController
+    private modalController: ModalController,
+    public translations: Translations
   ) { }
 
   ngOnInit(): void {

@@ -1,10 +1,11 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Validators as CustomValidators } from '../../application/validators';
 import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Translations } from '@pongscore/shared';
+
+import { Validators as CustomValidators } from '../../application/validators';
 import { ResetPasswordAction } from '../../application/store/auth.actions';
-import { ResetPasswordDto } from '@pongscore/api-interfaces';
 
 /**
  * Login Component
@@ -33,7 +34,7 @@ import { ResetPasswordDto } from '@pongscore/api-interfaces';
               method="post"
             >
               <ion-item>
-                <ion-label position="floating">Current Password</ion-label>
+                <ion-label position="floating">{{ translations.AUTH.RESET_PASSWORD.CURRENT_PASSWORD | translate }}</ion-label>
                 <ion-input
                   type="password"
                   name="currentPassword"
@@ -41,7 +42,7 @@ import { ResetPasswordDto } from '@pongscore/api-interfaces';
                 ></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">Password</ion-label>
+                <ion-label position="floating">{{ translations.AUTH.RESET_PASSWORD.NEW_PASSWORD | translate }}</ion-label>
                 <ion-input
                   type="password"
                   name="password"
@@ -49,7 +50,7 @@ import { ResetPasswordDto } from '@pongscore/api-interfaces';
                 ></ion-input>
               </ion-item>
               <ion-button type="submit" expand="full" color="primary"
-                >Change Password</ion-button
+                >{{ translations.AUTH.RESET_PASSWORD.CHANGE_PASSWORD | translate }}</ion-button
               >
             </form>
           </ion-col>
@@ -94,7 +95,8 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public translations: Translations
   ) {}
   /**
    * on init
@@ -106,21 +108,21 @@ export class ResetPasswordComponent implements OnInit {
         newPasswordToken: [params.passwordToken, Validators.required],
         currentPassword: [
           '',
-          // Validators.compose([
-          //   // 1. Password Field is Required
-          //   Validators.required,
-          //   // 2. check whether the entered password has a number
-          //   CustomValidators.patternValidator(/\d/, { hasNumber: true }),
-          //   // 3. check whether the entered password has upper case letter
-          //   CustomValidators.patternValidator(/[A-Z]/, {
-          //     hasCapitalCase: true,
-          //   }),
-          //   // 4. check whether the entered password has a lower-case letter
-          //   CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
+          Validators.compose([
+            // 1. Password Field is Required
+            Validators.required,
+            // 2. check whether the entered password has a number
+            CustomValidators.patternValidator(/\d/, { hasNumber: true }),
+            // 3. check whether the entered password has upper case letter
+            CustomValidators.patternValidator(/[A-Z]/, {
+              hasCapitalCase: true,
+            }),
+            // 4. check whether the entered password has a lower-case letter
+            CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
 
-          //   // 6. Has a minimum length of 8 characters
-          //   Validators.minLength(8),
-          // ]),
+            // 6. Has a minimum length of 8 characters
+            Validators.minLength(8),
+          ]),
         ],
         newPassword: [
           '',

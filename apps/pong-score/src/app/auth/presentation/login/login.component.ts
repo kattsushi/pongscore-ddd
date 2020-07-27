@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
+import { Translations } from '@pongscore/shared';
 
 import { LoginAction } from '../../application/store/auth.actions';
 import { Validators as CustomValidators } from '../../application/validators';
@@ -30,7 +31,7 @@ import { Validators as CustomValidators } from '../../application/validators';
             method="post"
           >
             <ion-item>
-              <ion-label position="floating">{{ 'AUTH.LOGIN.EMAIL' | translate }}</ion-label>
+              <ion-label position="floating">{{ translations.AUTH.LOGIN.EMAIL | translate }}</ion-label>
               <ion-input
                 type="email"
                 name="email"
@@ -39,7 +40,7 @@ import { Validators as CustomValidators } from '../../application/validators';
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating">{{ 'AUTH.LOGIN.PASSWORD' | translate }}</ion-label>
+              <ion-label position="floating">{{ translations.AUTH.LOGIN.PASSWORD | translate }}</ion-label>
               <ion-input
                 type="password"
                 name="password"
@@ -48,11 +49,11 @@ import { Validators as CustomValidators } from '../../application/validators';
             </ion-item>
 
             <p text-right (click)="goToForgotPassword.emit()">
-              {{ 'AUTH.LOGIN.FORGOT-PASSWORD' | translate }}
+              {{ translations.AUTH.LOGIN.FORGOT_PASSWORD | translate }}
             </p>
 
             <ion-button type="submit" expand="full" color="primary">
-              {{ 'AUTH.LOGIN.LOGIN' | translate }}
+              {{ translations.AUTH.LOGIN.LOGIN | translate }}
             </ion-button
             >
           </form>
@@ -61,12 +62,12 @@ import { Validators as CustomValidators } from '../../application/validators';
       <ion-row class="ion-align-items-center">
         <ion-col size="12">
           <div class="register">
-            <p text-center>{{ 'AUTH.LOGIN.DONT-HAVE-A-ACCOUNT' | translate }}</p>
+            <p text-center>{{ translations.AUTH.LOGIN.DONT_HAVE_A_ACCOUNT | translate }}</p>
             <ion-button
               expand="full"
               color="secondary"
               (click)="goToRegister.emit()"
-              >{{ 'AUTH.LOGIN.REGISTER' | translate }}</ion-button
+              >{{ translations.AUTH.LOGIN.REGISTER | translate }}</ion-button
             >
           </div>
         </ion-col>
@@ -114,7 +115,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private actions: Actions,
     private store: Store,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public translations: Translations
   ) {}
 
   ngOnInit(): void {
