@@ -1,4 +1,10 @@
+import { Injectable } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { State, Selector, Action, StateContext } from '@ngxs/store';
+import { Navigate } from '@ngxs/router-plugin';
+import { TranslateService } from '@ngx-translate/core';
+import { tap, catchError } from 'rxjs/operators';
+
 import {
   AuthStateModel,
   LogoutAction,
@@ -7,13 +13,8 @@ import {
   ResetPasswordAction,
   ForgotPasswordAction,
 } from './auth.actions';
-import { Injectable } from '@angular/core';
-import { tap, catchError } from 'rxjs/operators';
 import { AuthService } from '../../infrastructure/auth.service';
-import { Navigate } from '@ngxs/router-plugin';
-import { LoginUserResponse, IResponse } from '@pongscore/api-interfaces';
-import { ToastController } from '@ionic/angular';
-import { of } from 'rxjs';
+
 /**
  * State Auth
  */
@@ -50,13 +51,13 @@ export class AuthState {
    */
   constructor(
     private authService: AuthService,
-    public toastController: ToastController
+    private toastController: ToastController,
+    private translate: TranslateService
   ) {}
 
   private async handleError(error: { error: any }) {
-    console.log('ERROR', error.error.errorMessage);
     const toast = await this.toastController.create({
-      message: error.error.data.message ? error.error.data.message : error.error.errorMessage,
+      message: error.error.data.message ? this.translate.instant(error.error.data.message) : error.error.errorMessage,
       duration: 4000,
       color: 'warning',
     });
@@ -81,7 +82,7 @@ export class AuthState {
           email: action.payload.email,
         });
         const toast = await this.toastController.create({
-          message: 'Logeed.',
+          message: this.translate.instant(message),
           duration: 2000,
           color: 'primary',
         });
@@ -103,7 +104,7 @@ export class AuthState {
     return this.authService.register(action.payload).pipe(
       tap(async ({ message }) => {
         const toast = await this.toastController.create({
-          message: message,
+          message: this.translate.instant(message),
           duration: 2000,
           color: 'primary',
         });
@@ -126,7 +127,7 @@ export class AuthState {
     return this.authService.forgotPassword(action.payload).pipe(
       tap(async ({ message }) => {
         const toast = await this.toastController.create({
-          message: message,
+          message: this.translate.instant(message),
           duration: 2000,
           color: 'primary',
         });
@@ -161,7 +162,7 @@ export class AuthState {
     return this.authService.resetPassword(action.payload).pipe(
       tap(async ({ message }) => {
         const toast = await this.toastController.create({
-          message: message,
+          message: this.translate.instant(message),
           duration: 2000,
           color: 'primary',
         });

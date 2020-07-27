@@ -1,23 +1,25 @@
-import { Model } from 'mongoose';
 import {
   Injectable,
   HttpStatus,
   HttpException,
   HttpService,
 } from '@nestjs/common';
+import { ISendMailOptions } from '@nestjs-modules/mailer';
 import { InjectModel } from '@nestjs/mongoose';
 import { compare } from 'bcrypt';
+import { Model } from 'mongoose';
 import {
   LoginUserDto,
   ForgottenPassword,
   EmailVerification,
 } from '@pongscore/api-interfaces';
-import { ISendMailOptions } from '@nestjs-modules/mailer';
+
 import { environment } from './../../../environments/environment';
 import { UserService } from '../../user/infrastructure/user.service';
 import { CoreMailerService } from '../../core/mailer/mailer.service';
 import { JWTService } from './jwt.service';
 import { ConsentRegistry } from '../domain/schemas/consent-registry.schema';
+import { Translations } from '../../core/translations/translations.service';
 
 /**
  * Auth Service
@@ -37,6 +39,7 @@ export class AuthService {
     private usersService: UserService,
     private jwtService: JWTService,
     private mailer: CoreMailerService,
+    private translations: Translations,
     @InjectModel('EmailVerification')
     private readonly emailVerificationModel: Model<EmailVerification>,
     @InjectModel(ConsentRegistry.name)
@@ -51,9 +54,9 @@ export class AuthService {
   }: LoginUserDto): Promise<{ token: string }> {
     const userFromDb = await this.usersService.findOneByEmail(email);
     if (!userFromDb)
-      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(this.translations.AUTH.ERROR.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
     if (!userFromDb.auth.email.valid)
-      throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
+      throw new HttpException(this.translations.AUTH.ERROR.EMAIL_NOT_VERIFIED, HttpStatus.FORBIDDEN);
 
     const isValidPass = await compare(password, userFromDb.password);
     if (isValidPass) {
@@ -64,7 +67,7 @@ export class AuthService {
       return { token: accessToken.access_token };
     } else {
       throw new HttpException(
-        'LOGIN.ERROR.WRONG_PASSWORD',
+        this.translations.AUTH.ERROR.WRONG_PASSWORD,
         HttpStatus.UNAUTHORIZED
       );
     }
@@ -86,7 +89,7 @@ export class AuthService {
         15
     ) {
       throw new HttpException(
-        'RESET_PASSWORD.EMAIL_SENDED_RECENTLY',
+        this.translations.AUTH.ERROR.EMAIL_SENDED_RECENTLY,
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     } else {
@@ -105,7 +108,7 @@ export class AuthService {
         return forgottenPasswordModel;
       } else {
         throw new HttpException(
-          'LOGIN.ERROR.GENERIC_ERROR',
+          this.translations.AUTH.ERROR.GENERIC_ERROR,
           HttpStatus.INTERNAL_SERVER_ERROR
         );
       }
@@ -119,7 +122,7 @@ export class AuthService {
   async sendEmailForgotPassword(email: string): Promise<boolean> {
     const userFromDb = await this.usersService.findOneByEmail(email);
     if (!userFromDb)
-      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(this.translations.AUTH.ERROR.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
 
     const tokenModel = await this.createForgottenPasswordToken(email);
     console.log('TOken', tokenModel);
@@ -142,7 +145,7 @@ export class AuthService {
         .catch((error) => console.log('ERROR', error));
     } else {
       throw new HttpException(
-        'REGISTER.USER_NOT_REGISTERED',
+        this.translations.AUTH.ERROR.USER_NOT_REGISTERED,
         HttpStatus.FORBIDDEN
       );
     }
@@ -156,7 +159,7 @@ export class AuthService {
   async checkPassword(email: string, password: string) {
     const userFromDb = await this.usersService.findOneByEmail(email);
     if (!userFromDb)
-      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(this.translations.AUTH.ERROR.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
     return await compare(password, userFromDb.password);
   }
 
@@ -188,7 +191,7 @@ export class AuthService {
         15
     ) {
       throw new HttpException(
-        'LOGIN.EMAIL_SENDED_RECENTLY',
+        this.translations.AUTH.ERROR.EMAIL_SENDED_RECENTLY,
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     } else {
@@ -264,7 +267,7 @@ export class AuthService {
       return this.mailer.mail(mailOptions);
     } else {
       throw new HttpException(
-        'REGISTER.USER_NOT_REGISTERED',
+        this.translations.AUTH.ERROR.USER_NOT_REGISTERED,
         HttpStatus.FORBIDDEN
       );
     }
@@ -297,7 +300,7 @@ export class AuthService {
       }
     } else {
       throw new HttpException(
-        'LOGIN.EMAIL_CODE_NOT_VALID',
+        this.translations.AUTH.ERROR.EMAIL_CODE_NOT_VALID,
         HttpStatus.FORBIDDEN
       );
     }

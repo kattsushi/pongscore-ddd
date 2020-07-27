@@ -11,10 +11,6 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-
-import { AuthService } from './../infrastructure/auth.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-
 import { Request } from 'express';
 import {
   LoginUserDto,
@@ -22,11 +18,14 @@ import {
   ResponseSuccess,
   ResponseError,
   ResetPasswordDto,
-  LoginUserResponse,
   CreateUserDto,
   UserDto,
 } from '@pongscore/api-interfaces';
+
+import { AuthService } from './../infrastructure/auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserService } from '../../user/infrastructure/user.service';
+import { Translations } from '../../core/translations/translations.service';
 
 /**
  * Auth Controller
@@ -42,7 +41,8 @@ export class AuthController {
    */
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private translations: Translations
   ) {}
   /**
    * Uses guards
@@ -55,10 +55,11 @@ export class AuthController {
   async login(@Body() loginUserDto: LoginUserDto): Promise<IResponse<any>> {
     try {
       const res = await this.authService.validateLogin(loginUserDto);
-      return new ResponseSuccess('LOGIN.SUCCESS', res);
+
+      return new ResponseSuccess(this.translations.AUTH.SUCCESS.LOGIN, res);
     } catch (error) {
       throw new HttpException(
-        new ResponseError('LOGIN.ERROR', error),
+        new ResponseError(this.translations.AUTH.ERROR.LOGIN, error),
         HttpStatus.UNAUTHORIZED
       );
     }
@@ -82,16 +83,16 @@ export class AuthController {
       await this.authService.saveUserConsent(newUser.email);
       const sent = await this.authService.sendEmailVerification(newUser.email);
       if (sent) {
-        return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
+        return new ResponseSuccess(this.translations.AUTH.SUCCESS.USER_REGISTERED_SUCCESSFULLY);
       } else {
         throw new HttpException(
-          new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT', false),
+          new ResponseError(this.translations.AUTH.ERROR.MAIL_NOT_SENT, false),
           HttpStatus.INTERNAL_SERVER_ERROR
         );
       }
     } catch (error) {
       throw new HttpException(
-        new ResponseError('REGISTRATION.ERROR.GENERIC_ERROR', error),
+        new ResponseError(this.translations.AUTH.ERROR.GENERIC_ERROR, error),
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
@@ -107,10 +108,10 @@ export class AuthController {
   ): Promise<IResponse<boolean>> {
     try {
       const isEmailVerified = await this.authService.verifyEmail(params.token);
-      return new ResponseSuccess('LOGIN.EMAIL_VERIFIED', isEmailVerified);
+      return new ResponseSuccess(this.translations.AUTH.SUCCESS.EMAIL_VERIFIED, isEmailVerified);
     } catch (error) {
       throw new HttpException(
-        new ResponseError('LOGIN.ERROR', error),
+        new ResponseError(this.translations.AUTH.ERROR.GENERIC_ERROR, error),
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
@@ -129,7 +130,7 @@ export class AuthController {
     try {
       return new ResponseSuccess('you did it', null);
     } catch (error) {
-      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
+      return new ResponseError(this.translations.AUTH.ERROR.GENERIC_ERROR, error);
     }
   }
 
@@ -144,13 +145,13 @@ export class AuthController {
         params.email
       );
       if (isEmailSent) {
-        return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
+        return new ResponseSuccess(this.translations.AUTH.SUCCESS.EMAIL_RESENT, null);
       } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+        return new ResponseError(this.translations.AUTH.ERROR.MAIL_NOT_SENT);
       }
     } catch (error) {
       throw new HttpException(
-        new ResponseError('LOGIN.ERROR.SEND_EMAIL', error),
+        new ResponseError(this.translations.AUTH.ERROR.MAIL_NOT_SENT, error),
         HttpStatus.UNAUTHORIZED
       );
     }
@@ -177,7 +178,7 @@ export class AuthController {
           );
         } else {
           throw new HttpException(
-            new ResponseError('RESET_PASSWORD.WRONG_CURRENT_PASSWORD', false),
+            new ResponseError(this.translations.AUTH.ERROR.WRONG_CURRENT_PASSWORD, false),
             HttpStatus.NOT_ACCEPTABLE
           );
         }
@@ -193,23 +194,23 @@ export class AuthController {
           if (isNewPasswordChanged) await forgottenPasswordModel.remove();
         } else {
           throw new HttpException(
-            new ResponseError('RESET_PASSWORD.CHANGE_PASSWORD_ERROR', false),
+            new ResponseError(this.translations.AUTH.ERROR.CHANGE_PASSWORD_ERROR, false),
             HttpStatus.INTERNAL_SERVER_ERROR
           );
         }
       } else {
         throw new HttpException(
-          new ResponseError('RESET_PASSWORD.CHANGE_PASSWORD_ERROR', false),
+          new ResponseError(this.translations.AUTH.ERROR.CHANGE_PASSWORD_ERROR, false),
           HttpStatus.INTERNAL_SERVER_ERROR
         );
       }
       return new ResponseSuccess(
-        'RESET_PASSWORD.PASSWORD_CHANGED',
+        this.translations.AUTH.SUCCESS.PASSWORD_CHANGED,
         isNewPasswordChanged
       );
     } catch (error) {
       throw new HttpException(
-        new ResponseError('RESET_PASSWORD.CHANGE_PASSWORD_ERROR', error),
+        new ResponseError(this.translations.AUTH.ERROR.CHANGE_PASSWORD_ERROR, error),
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }

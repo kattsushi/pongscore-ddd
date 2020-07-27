@@ -1,6 +1,28 @@
 
 export const es: typeof import('./en').en = {
   AUTH: {
+    SUCCESS: {
+      LOGIN: 'Inicio de Sesion Exitoso',
+      USER_REGISTERED_SUCCESSFULLY: 'Usuario Registrado Correctamente',
+      EMAIL_VERIFIED: 'Correo Verificado',
+      EMAIL_RESENT: 'Correo Reenviado',
+      PASSWORD_CHANGED: 'Password Changed'
+    },
+    ERROR: {
+      LOGIN: 'Hubo un Error de Inicio de Sesion',
+      USER_NOT_FOUND: 'Usuario no encontrado',
+      EMAIL_NOT_VERIFIED: 'Correo no Verificado',
+      WRONG_PASSWORD: 'Contraseña Invalida',
+      MAIL_NOT_SENT: 'Mail not Sent',
+      GENERIC_ERROR: 'Something went Wrong',
+      USER_ALREADY_REGISTERED: 'Usuario ya esta registrado',
+      MISSING_MANDATORY_PARAMETERS: 'Faltan Campos Requeridos',
+      EMAIL_SENDED_RECENTLY: 'Correo enviado recientemente',
+      USER_NOT_REGISTERED: 'Usuario no Registrado',
+      EMAIL_CODE_NOT_VALID: 'Codigo de Correo no Valido',
+      WRONG_CURRENT_PASSWORD: 'Wrong Current Password',
+      CHANGE_PASSWORD_ERROR: 'Error Change Password',
+    },
     LOGIN: {
       PASSWORD: 'Contraseña',
       FORGOT_PASSWORD: 'Olvidaste tu contraseña?',

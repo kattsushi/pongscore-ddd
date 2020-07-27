@@ -1,10 +1,12 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
-import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { hash } from 'bcrypt';
 import { CreateUserDto } from '@pongscore/api-interfaces';
+
 import { saltRounds } from '../../auth/infrastructure/constants';
 import { User } from './../domain/user.schema';
+import { Translations } from '../../core/translations/translations.service';
 
 /**
  * User Service
@@ -18,7 +20,9 @@ export class UserService {
    * Creates an instance of user service.
    * @param userModel
    */
-  constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
+  constructor(
+    private translations: Translations,
+    @InjectModel(User.name) private readonly userModel: Model<User>) {}
 
   /**
    * Finds one
@@ -99,7 +103,7 @@ export class UserService {
   async setPassword(email: string, newPassword: string): Promise<boolean> {
     const userFromDb = await this.userModel.findOne({ email: email });
     if (!userFromDb)
-      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(this.translations.AUTH.ERROR.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
     userFromDb.password = await hash(newPassword, saltRounds);
 
     await userFromDb.save();
@@ -125,13 +129,13 @@ export class UserService {
         return userRegistered;
       } else {
         throw new HttpException(
-          'REGISTRATION.USER_ALREADY_REGISTERED',
+          this.translations.AUTH.ERROR.USER_ALREADY_REGISTERED,
           HttpStatus.FORBIDDEN
         );
       }
     } else {
       throw new HttpException(
-        'REGISTRATION.MISSING_MANDATORY_PARAMETERS',
+        this.translations.AUTH.ERROR.MISSING_MANDATORY_PARAMETERS,
         HttpStatus.FORBIDDEN
       );
     }
